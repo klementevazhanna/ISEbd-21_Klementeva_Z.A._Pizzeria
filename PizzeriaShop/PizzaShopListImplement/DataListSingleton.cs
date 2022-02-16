@@ -11,6 +11,8 @@ namespace PizzaShopListImplement
 
         public List<Order> Orders { get; set; }
 
+        public List<WareHouse> Warehouses { get; set; }
+
         public List<Pizza> Pizzas { get; set; }
 
         private DataListSingleton()
@@ -18,6 +20,7 @@ namespace PizzaShopListImplement
             Ingredients = new List<Ingredient>();
             Orders = new List<Order>();
             Pizzas = new List<Pizza>();
+            Warehouses = new List<WareHouse>();
         }
 
         public static DataListSingleton GetInstance()
