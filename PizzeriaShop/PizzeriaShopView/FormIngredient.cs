@@ -2,28 +2,24 @@
 using PizzeriaShopContracts.BusinessLogicsContracts;
 using System;
 using System.Windows.Forms;
-using Unity;
 
 namespace PizzeriaShopView
 {
     public partial class FormIngredient : Form
     {
-        [Dependency]
-        public new IUnityContainer Container { get; set; }
-
         public int Id
         {
             set { id = value; }
         }
 
-        public readonly IIngredientLogic logic;
+        public readonly IIngredientLogic _logic;
 
         private int? id;
 
         public FormIngredient(IIngredientLogic logic)
         {
             InitializeComponent();
-            this.logic = logic;
+            _logic = logic;
         }
 
         private void FormIngredient_Load(object sender, EventArgs e)
@@ -32,7 +28,7 @@ namespace PizzeriaShopView
             {
                 try
                 {
-                    var view = logic.Read(new IngredientBindingModel { Id = id })?[0];
+                    var view = _logic.Read(new IngredientBindingModel { Id = id })?[0];
                     if (view != null)
                     {
                         textBoxName.Text = view.IngredientName;
@@ -54,7 +50,7 @@ namespace PizzeriaShopView
             }
             try
             {
-                logic.CreateOrUpdate(new IngredientBindingModel
+                _logic.CreateOrUpdate(new IngredientBindingModel
                 {
                     Id = id,
                     IngredientName = textBoxName.Text

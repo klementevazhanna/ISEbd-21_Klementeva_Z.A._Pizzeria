@@ -19,7 +19,7 @@ namespace PizzaShopListImplement.Implements
 
         public List<PizzaViewModel> GetFullList()
         {
-            var result = new List<PizzaViewModel>();
+            List<PizzaViewModel> result = new List<PizzaViewModel>();
             foreach (var pizza in source.Pizzas)
             {
                 result.Add(CreateModel(pizza));
@@ -33,7 +33,7 @@ namespace PizzaShopListImplement.Implements
             {
                 return null;
             }
-            var result = new List<PizzaViewModel>();
+            List<PizzaViewModel> result = new List<PizzaViewModel>();
             foreach (var pizza in source.Pizzas)
             {
                 if (pizza.PizzaName.Contains(model.PizzaName))
@@ -63,7 +63,7 @@ namespace PizzaShopListImplement.Implements
 
         public void Insert(PizzaBindingModel model)
         {
-            var tempPizza = new Pizza
+            Pizza tempPizza = new Pizza
             {
                 Id = 1,
                 PizzaIngredients = new Dictionary<int, int>()
@@ -112,6 +112,7 @@ namespace PizzaShopListImplement.Implements
         {
             pizza.PizzaName = model.PizzaName;
             pizza.Price = model.Price;
+
             foreach (var key in pizza.PizzaIngredients.Keys.ToList())
             {
                 if (!model.PizzaIngredients.ContainsKey(key))
@@ -119,17 +120,17 @@ namespace PizzaShopListImplement.Implements
                     pizza.PizzaIngredients.Remove(key);
                 }
             }
-            foreach (var ingredient in model.PizzaIngredients)
+            foreach (var pizzas in model.PizzaIngredients)
             {
-                if (pizza.PizzaIngredients.ContainsKey(ingredient.Key))
+                if (pizza.PizzaIngredients.ContainsKey(pizzas.Key))
                 {
-                    pizza.PizzaIngredients[ingredient.Key] =
-                    model.PizzaIngredients[ingredient.Key].Item2;
+                    pizza.PizzaIngredients[pizzas.Key] =
+                    model.PizzaIngredients[pizzas.Key].Item2;
                 }
                 else
                 {
-                    pizza.PizzaIngredients.Add(ingredient.Key,
-                    model.PizzaIngredients[ingredient.Key].Item2);
+                    pizza.PizzaIngredients.Add(pizzas.Key,
+                    model.PizzaIngredients[pizzas.Key].Item2);
                 }
             }
             return pizza;
@@ -137,26 +138,28 @@ namespace PizzaShopListImplement.Implements
 
         private PizzaViewModel CreateModel(Pizza pizza)
         {
-            var pizzaIngredients = new Dictionary<int, (string, int)>();
-            foreach (var pc in pizza.PizzaIngredients)
+
+            Dictionary<int, (string, int)> PizzaIngredients = new
+            Dictionary<int, (string, int)>();
+            foreach (var ic in pizza.PizzaIngredients)
             {
-                string ingredientName = string.Empty;
-                foreach (var ingredient in source.Ingredients)
+                string pizzaName = string.Empty;
+                foreach (var pizzas in source.Pizzas)
                 {
-                    if (pc.Key == ingredient.Id)
+                    if (ic.Key == pizzas.Id)
                     {
-                        ingredientName = ingredient.IngredientName;
+                        pizzaName = pizzas.PizzaName;
                         break;
                     }
                 }
-                pizzaIngredients.Add(pc.Key, (ingredientName, pc.Value));
+                PizzaIngredients.Add(ic.Key, (pizzaName, ic.Value));
             }
             return new PizzaViewModel
             {
                 Id = pizza.Id,
                 PizzaName = pizza.PizzaName,
                 Price = pizza.Price,
-                PizzaIngredients = pizzaIngredients
+                PizzaIngredients = PizzaIngredients
             };
         }
     }

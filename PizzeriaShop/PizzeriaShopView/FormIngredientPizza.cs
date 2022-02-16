@@ -3,15 +3,11 @@ using PizzeriaShopContracts.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using Unity;
 
 namespace PizzeriaShopView
 {
     public partial class FormIngredientPizza : Form
     {
-        [Dependency]
-        public new IUnityContainer Container { get; set; }
-
         public int Id
         {
             get { return Convert.ToInt32(comboBoxIngredient.SelectedValue); }

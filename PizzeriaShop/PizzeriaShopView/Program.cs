@@ -1,4 +1,4 @@
-using PizzaShopListImplement.Implements;
+using PizzeriaFileImplement.Implements;
 using PizzeriaShopBusinessLogic.BusinessLogics;
 using PizzeriaShopContracts.BusinessLogicsContracts;
 using PizzeriaShopContracts.StoragesContracts;
@@ -11,13 +11,26 @@ namespace PizzeriaShopView
 {
     static class Program
     {
+        private static IUnityContainer container = null;
+
+        public static IUnityContainer Container
+        {
+            get
+            {
+                if (container == null)
+                {
+                    container = BuildUnityContainer();
+                }
+                return container;
+            }
+        }
+
         [STAThread]
         static void Main()
         {
-            var container = BuildUnityContainer();
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(container.Resolve<FormMain>());
+            Application.Run(Container.Resolve<FormMain>());
         }
 
         private static IUnityContainer BuildUnityContainer()
@@ -35,7 +48,6 @@ namespace PizzeriaShopView
             HierarchicalLifetimeManager());
             currentContainer.RegisterType<IPizzaLogic, PizzaLogic>(new
             HierarchicalLifetimeManager());
-
             return currentContainer;
         }
     }

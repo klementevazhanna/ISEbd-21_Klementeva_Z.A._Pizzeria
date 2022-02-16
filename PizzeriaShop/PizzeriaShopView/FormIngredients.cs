@@ -8,9 +8,6 @@ namespace PizzeriaShopView
 {
     public partial class FormIngredients : Form
     {
-        [Dependency]
-        public new IUnityContainer Container { get; set; }
-
         private readonly IIngredientLogic _logic;
 
         public FormIngredients(IIngredientLogic logic)
@@ -31,9 +28,9 @@ namespace PizzeriaShopView
                 var list = _logic.Read(null);
                 if (list != null)
                 {
-                    dataGridView1.DataSource = list;
-                    dataGridView1.Columns[0].Visible = false;
-                    dataGridView1.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                    dataGridView.DataSource = list;
+                    dataGridView.Columns[0].Visible = false;
+                    dataGridView.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
                 }
             }
             catch (Exception ex)
@@ -44,7 +41,7 @@ namespace PizzeriaShopView
 
         private void buttonAdd_Click(object sender, EventArgs e)
         {
-            var form = Container.Resolve<FormIngredient>();
+            var form = Program.Container.Resolve<FormIngredient>();
             if (form.ShowDialog() == DialogResult.OK)
             {
                 LoadData();
@@ -53,10 +50,10 @@ namespace PizzeriaShopView
 
         private void buttonUpd_Click(object sender, EventArgs e)
         {
-            if (dataGridView1.SelectedRows.Count == 1)
+            if (dataGridView.SelectedRows.Count == 1)
             {
-                var form = Container.Resolve<FormIngredient>();
-                form.Id = Convert.ToInt32(dataGridView1.SelectedRows[0].Cells[0].Value);
+                var form = Program.Container.Resolve<FormIngredient>();
+                form.Id = Convert.ToInt32(dataGridView.SelectedRows[0].Cells[0].Value);
                 if (form.ShowDialog() == DialogResult.OK)
                 {
                     LoadData();
@@ -66,13 +63,13 @@ namespace PizzeriaShopView
 
         private void buttonDel_Click(object sender, EventArgs e)
         {
-            if (dataGridView1.SelectedRows.Count == 1)
+            if (dataGridView.SelectedRows.Count == 1)
             {
                 if (MessageBox.Show("Удалить запись", "Вопрос", MessageBoxButtons.YesNo,
                 MessageBoxIcon.Question) == DialogResult.Yes)
                 {
                     int id =
-                    Convert.ToInt32(dataGridView1.SelectedRows[0].Cells[0].Value);
+                    Convert.ToInt32(dataGridView.SelectedRows[0].Cells[0].Value);
                     try
                     {
                         _logic.Delete(new IngredientBindingModel { Id = id });

@@ -8,9 +8,6 @@ namespace PizzeriaShopView
 {
     public partial class FormMain : Form
     {
-        [Dependency]
-        public new IUnityContainer Container { get; set; }
-
         private readonly IOrderLogic _orderLogic;
 
         public FormMain(IOrderLogic orderLogic)
@@ -31,11 +28,9 @@ namespace PizzeriaShopView
                 var list = _orderLogic.Read(null);
                 if (list != null)
                 {
-                    dataGridView1.DataSource = list;
-                    dataGridView1.Columns[0].Visible = false;
-                    dataGridView1.Columns[1].Visible = false;
-                    dataGridView1.Columns[2].AutoSizeMode =
-                    DataGridViewAutoSizeColumnMode.Fill;
+                    dataGridView.DataSource = list;
+                    dataGridView.Columns[0].Visible = false;
+                    dataGridView.Columns[1].Visible = false;
                 }
             }
             catch (Exception ex)
@@ -47,28 +42,28 @@ namespace PizzeriaShopView
 
         private void ингредиентыToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var form = Container.Resolve<FormIngredients>();
+            var form = Program.Container.Resolve<FormIngredients>();
             form.ShowDialog();
         }
 
         private void пиццаToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var form = Container.Resolve<FormPizzas>();
+            var form = Program.Container.Resolve<FormPizzas>();
             form.ShowDialog();
         }
 
         private void buttonCreateOrder_Click(object sender, EventArgs e)
         {
-            var form = Container.Resolve<FormCreateOrder>();
+            var form = Program.Container.Resolve<FormCreateOrder>();
             form.ShowDialog();
             LoadData();
         }
 
         private void buttonTakeOrderInWork_Click(object sender, EventArgs e)
         {
-            if (dataGridView1.SelectedRows.Count == 1)
+            if (dataGridView.SelectedRows.Count == 1)
             {
-                int id = Convert.ToInt32(dataGridView1.SelectedRows[0].Cells[0].Value);
+                int id = Convert.ToInt32(dataGridView.SelectedRows[0].Cells[0].Value);
                 try
                 {
                     _orderLogic.TakeOrderInWork(new ChangeStatusBindingModel
@@ -85,9 +80,9 @@ namespace PizzeriaShopView
 
         private void buttonOrderReady_Click(object sender, EventArgs e)
         {
-            if (dataGridView1.SelectedRows.Count == 1)
+            if (dataGridView.SelectedRows.Count == 1)
             {
-                int id = Convert.ToInt32(dataGridView1.SelectedRows[0].Cells[0].Value);
+                int id = Convert.ToInt32(dataGridView.SelectedRows[0].Cells[0].Value);
                 try
                 {
                     _orderLogic.FinishOrder(new ChangeStatusBindingModel
@@ -106,9 +101,9 @@ namespace PizzeriaShopView
 
         private void buttonDeliveryOrder_Click(object sender, EventArgs e)
         {
-            if (dataGridView1.SelectedRows.Count == 1)
+            if (dataGridView.SelectedRows.Count == 1)
             {
-                int id = Convert.ToInt32(dataGridView1.SelectedRows[0].Cells[0].Value);
+                int id = Convert.ToInt32(dataGridView.SelectedRows[0].Cells[0].Value);
                 try
                 {
                     _orderLogic.DeliveryOrder(new ChangeStatusBindingModel { OrderId = id });

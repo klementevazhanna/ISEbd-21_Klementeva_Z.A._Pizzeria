@@ -18,7 +18,7 @@ namespace PizzaShopListImplement.Implements
 
         public List<IngredientViewModel> GetFullList()
         {
-            var result = new List<IngredientViewModel>();
+            List<IngredientViewModel> result = new List<IngredientViewModel>();
             foreach (var ingredient in source.Ingredients)
             {
                 result.Add(CreateModel(ingredient));
@@ -32,7 +32,7 @@ namespace PizzaShopListImplement.Implements
             {
                 return null;
             }
-            var result = new List<IngredientViewModel>();
+            List<IngredientViewModel> result = new List<IngredientViewModel>();
             foreach (var ingredient in source.Ingredients)
             {
                 if (ingredient.IngredientName.Contains(model.IngredientName))
@@ -62,7 +62,7 @@ namespace PizzaShopListImplement.Implements
 
         public void Insert(IngredientBindingModel model)
         {
-            var tempIngredient = new Ingredient { Id = 1 };
+            Ingredient tempIngredient = new Ingredient { Id = 1 };
             foreach (var component in source.Ingredients)
             {
                 if (component.Id >= tempIngredient.Id)
