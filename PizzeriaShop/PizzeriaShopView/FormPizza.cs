@@ -10,9 +10,6 @@ namespace PizzeriaShopView
 {
     public partial class FormPizza : Form
     {
-        [Dependency]
-        public new IUnityContainer Container { get; set; }
-
         public int Id
         {
             set { id = value; }
@@ -88,7 +85,7 @@ namespace PizzeriaShopView
 
         private void buttonAdd_Click(object sender, EventArgs e)
         {
-            var form = Container.Resolve<FormIngredientPizza>();
+            var form = Program.Container.Resolve<FormIngredientPizza>();
             if (form.ShowDialog() == DialogResult.OK)
             {
                 if (ingredientPizza.ContainsKey(form.Id))
@@ -107,7 +104,7 @@ namespace PizzeriaShopView
         {
             if (dataGridView.SelectedRows.Count == 1)
             {
-                var form = Container.Resolve<FormIngredientPizza>();
+                var form = Program.Container.Resolve<FormIngredientPizza>();
                 int id = Convert.ToInt32(dataGridView.SelectedRows[0].Cells[0].Value);
                 form.Id = id;
                 form.Count = ingredientPizza[id].Item2;

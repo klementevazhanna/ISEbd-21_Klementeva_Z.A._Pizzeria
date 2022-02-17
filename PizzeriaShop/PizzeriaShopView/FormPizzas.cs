@@ -8,9 +8,6 @@ namespace PizzeriaShopView
 {
     public partial class FormPizzas : Form
     {
-        [Dependency]
-        public new IUnityContainer Container { get; set; }
-
         private readonly IPizzaLogic _logic;
 
         public FormPizzas(IPizzaLogic logic)
@@ -47,7 +44,7 @@ namespace PizzeriaShopView
 
         private void buttonAdd_Click(object sender, EventArgs e)
         {
-            var form = Container.Resolve<FormPizza>();
+            var form = Program.Container.Resolve<FormPizza>();
             if (form.ShowDialog() == DialogResult.OK)
             {
                 LoadData();
@@ -58,7 +55,7 @@ namespace PizzeriaShopView
         {
             if (dataGridView.SelectedRows.Count == 1)
             {
-                var form = Container.Resolve<FormPizza>();
+                var form = Program.Container.Resolve<FormPizza>();
                 form.Id = Convert.ToInt32(dataGridView.SelectedRows[0].Cells[0].Value);
                 if (form.ShowDialog() == DialogResult.OK)
                 {

@@ -4,15 +4,11 @@ using PizzeriaShopContracts.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using Unity;
 
 namespace PizzeriaShopView
 {
     public partial class FormCreateOrder : Form
     {
-        [Dependency]
-        public new IUnityContainer Container { get; set; }
-
         private readonly IPizzaLogic _logicP;
 
         private readonly IOrderLogic _logicO;
