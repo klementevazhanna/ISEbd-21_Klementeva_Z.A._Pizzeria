@@ -42,11 +42,16 @@ namespace PizzeriaShopView
             HierarchicalLifetimeManager());
             currentContainer.RegisterType<IPizzaStorage, PizzasStorage>(new
             HierarchicalLifetimeManager());
+            currentContainer.RegisterType<IWareHouseStorage, WareHouseStorage>(new
+            HierarchicalLifetimeManager());
+
             currentContainer.RegisterType<IIngredientLogic, IngredientLogic>(new
             HierarchicalLifetimeManager());
             currentContainer.RegisterType<IOrderLogic, OrderLogic>(new
             HierarchicalLifetimeManager());
             currentContainer.RegisterType<IPizzaLogic, PizzaLogic>(new
+            HierarchicalLifetimeManager());
+            currentContainer.RegisterType<IWareHouseLogic, WareHouseLogic>(new
             HierarchicalLifetimeManager());
             return currentContainer;
         }

@@ -121,5 +121,17 @@ namespace PizzeriaShopView
         {
             LoadData();
         }
+
+        private void пополнениеСкладаToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var form = Program.Container.Resolve<FormReplenishmentWareHouse>();
+            form.ShowDialog();
+        }
+
+        private void складыToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var form = Program.Container.Resolve<FormWareHouses>();
+            form.ShowDialog();
+        }
     }
 }
