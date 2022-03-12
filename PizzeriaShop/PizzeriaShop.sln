@@ -5,13 +5,15 @@ VisualStudioVersion = 16.0.31624.102
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PizzeriaShopView", "PizzeriaShopView\PizzeriaShopView.csproj", "{7603EE81-3B49-47AE-9E8C-1E3AA2134197}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PizzaShopListImplement", "PizzaShopListImplement\PizzaShopListImplement.csproj", "{FE99F2C7-D5A0-4975-A7C7-33AD7821EFF3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PizzaShopListImplement", "PizzaShopListImplement\PizzaShopListImplement.csproj", "{FE99F2C7-D5A0-4975-A7C7-33AD7821EFF3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PizzeriaFileImplement", "PizzeriaFileImplement\PizzeriaFileImplement.csproj", "{685747ED-6233-4289-B87E-C422C6172C91}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PizzeriaFileImplement", "PizzeriaFileImplement\PizzeriaFileImplement.csproj", "{685747ED-6233-4289-B87E-C422C6172C91}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PizzeriaShopBusinessLogic", "PizzeriaShopBusinessLogic\PizzeriaShopBusinessLogic.csproj", "{A23140A8-AD72-4CF4-A22B-62C617C3681D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PizzeriaShopBusinessLogic", "PizzeriaShopBusinessLogic\PizzeriaShopBusinessLogic.csproj", "{A23140A8-AD72-4CF4-A22B-62C617C3681D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PizzeriaShopContracts", "PizzeriaShopContracts\PizzeriaShopContracts.csproj", "{5B530F13-6247-4F57-B4E2-D911EF35A47C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PizzeriaShopContracts", "PizzeriaShopContracts\PizzeriaShopContracts.csproj", "{5B530F13-6247-4F57-B4E2-D911EF35A47C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PizzeriaDatabaseImplement", "PizzeriaDatabaseImplement\PizzeriaDatabaseImplement.csproj", "{D3A79EF1-302C-49C8-8112-E995D3F0D65F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{5B530F13-6247-4F57-B4E2-D911EF35A47C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5B530F13-6247-4F57-B4E2-D911EF35A47C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5B530F13-6247-4F57-B4E2-D911EF35A47C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D3A79EF1-302C-49C8-8112-E995D3F0D65F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D3A79EF1-302C-49C8-8112-E995D3F0D65F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D3A79EF1-302C-49C8-8112-E995D3F0D65F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D3A79EF1-302C-49C8-8112-E995D3F0D65F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
