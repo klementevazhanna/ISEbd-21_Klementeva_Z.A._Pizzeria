@@ -163,5 +163,10 @@ namespace PizzaShopListImplement.Implements
                 WareHouseIngredients = wareHouseComponents
             };
         }
+
+        public bool WriteOffComponents(Dictionary<int, (string, int)> pizzaIngredients, int pizzaCount)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -12,9 +12,15 @@ namespace PizzeriaShopBusinessLogic.BusinessLogics
     {
         private readonly IOrderStorage _orderStorage;
 
-        public OrderLogic(IOrderStorage orderStorage)
+        private readonly IWareHouseStorage _wareHouseStorage;
+
+        private readonly IPizzaStorage _pizzaStorage;
+
+        public OrderLogic(IOrderStorage orderStorage, IWareHouseStorage wareHouseStorage, IPizzaStorage pizzaStorage)
         {
             _orderStorage = orderStorage;
+            _wareHouseStorage = wareHouseStorage;
+            _pizzaStorage = pizzaStorage;
         }
 
         public List<OrderViewModel> Read(OrderBindingModel model)
@@ -52,6 +58,15 @@ namespace PizzeriaShopBusinessLogic.BusinessLogics
             if (order.Status != OrderStatus.Принят)
             {
                 throw new Exception("Заказ не в статусе \"Принят\"");
+            }
+            if (!_wareHouseStorage.WriteOffComponents(
+                _pizzaStorage.GetElement(
+                    new PizzaBindingModel { Id = order.PizzaId }
+                ).PizzaIngredients, 
+                order.Count
+            ))
+            {
+                throw new Exception("Не хватает ингредиентов");
             }
             _orderStorage.Update(new OrderBindingModel
             {

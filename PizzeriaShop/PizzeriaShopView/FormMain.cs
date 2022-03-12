@@ -124,13 +124,13 @@ namespace PizzeriaShopView
 
         private void пополнениеСкладаToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var form = Container.Resolve<FormReplenishmentWareHouse>();
+            var form = Program.Container.Resolve<FormReplenishmentWareHouse>();
             form.ShowDialog();
         }
 
         private void складыToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var form = Container.Resolve<FormWareHouses>();
+            var form = Program.Container.Resolve<FormWareHouses>();
             form.ShowDialog();
         }
     }

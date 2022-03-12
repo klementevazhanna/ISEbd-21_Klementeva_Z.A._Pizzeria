@@ -34,21 +34,26 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             this.SuspendLayout();
             // 
-            // dataGridView1
+            // dataGridView
             // 
+            this.dataGridView.AllowUserToAddRows = false;
+            this.dataGridView.AllowUserToDeleteRows = false;
             this.dataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView.Location = new System.Drawing.Point(12, 47);
-            this.dataGridView.Name = "dataGridView1";
+            this.dataGridView.Location = new System.Drawing.Point(12, 38);
+            this.dataGridView.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.dataGridView.Name = "dataGridView";
+            this.dataGridView.ReadOnly = true;
             this.dataGridView.RowHeadersWidth = 51;
             this.dataGridView.RowTemplate.Height = 29;
-            this.dataGridView.Size = new System.Drawing.Size(514, 456);
+            this.dataGridView.Size = new System.Drawing.Size(514, 365);
             this.dataGridView.TabIndex = 0;
             // 
             // buttonAdd
             // 
-            this.buttonAdd.Location = new System.Drawing.Point(569, 83);
+            this.buttonAdd.Location = new System.Drawing.Point(569, 66);
+            this.buttonAdd.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.buttonAdd.Name = "buttonAdd";
-            this.buttonAdd.Size = new System.Drawing.Size(151, 29);
+            this.buttonAdd.Size = new System.Drawing.Size(151, 32);
             this.buttonAdd.TabIndex = 1;
             this.buttonAdd.Text = "Добавить";
             this.buttonAdd.UseVisualStyleBackColor = true;
@@ -56,9 +61,10 @@
             // 
             // buttonUpdate
             // 
-            this.buttonUpdate.Location = new System.Drawing.Point(569, 172);
+            this.buttonUpdate.Location = new System.Drawing.Point(569, 138);
+            this.buttonUpdate.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.buttonUpdate.Name = "buttonUpdate";
-            this.buttonUpdate.Size = new System.Drawing.Size(151, 29);
+            this.buttonUpdate.Size = new System.Drawing.Size(151, 34);
             this.buttonUpdate.TabIndex = 2;
             this.buttonUpdate.Text = "Изменить";
             this.buttonUpdate.UseVisualStyleBackColor = true;
@@ -66,9 +72,10 @@
             // 
             // buttonDelete
             // 
-            this.buttonDelete.Location = new System.Drawing.Point(569, 270);
+            this.buttonDelete.Location = new System.Drawing.Point(569, 216);
+            this.buttonDelete.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.buttonDelete.Name = "buttonDelete";
-            this.buttonDelete.Size = new System.Drawing.Size(151, 29);
+            this.buttonDelete.Size = new System.Drawing.Size(151, 34);
             this.buttonDelete.TabIndex = 3;
             this.buttonDelete.Text = "Удалить";
             this.buttonDelete.UseVisualStyleBackColor = true;
@@ -76,9 +83,10 @@
             // 
             // buttonReflesh
             // 
-            this.buttonReflesh.Location = new System.Drawing.Point(569, 356);
+            this.buttonReflesh.Location = new System.Drawing.Point(569, 285);
+            this.buttonReflesh.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.buttonReflesh.Name = "buttonReflesh";
-            this.buttonReflesh.Size = new System.Drawing.Size(151, 29);
+            this.buttonReflesh.Size = new System.Drawing.Size(151, 32);
             this.buttonReflesh.TabIndex = 4;
             this.buttonReflesh.Text = "Обновить";
             this.buttonReflesh.UseVisualStyleBackColor = true;
@@ -86,19 +94,21 @@
             // 
             // FormWareHouses
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(732, 552);
+            this.ClientSize = new System.Drawing.Size(732, 442);
             this.Controls.Add(this.buttonReflesh);
             this.Controls.Add(this.buttonDelete);
             this.Controls.Add(this.buttonUpdate);
             this.Controls.Add(this.buttonAdd);
             this.Controls.Add(this.dataGridView);
+            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "FormWareHouses";
             this.Text = "Склады";
             this.Load += new System.EventHandler(this.FormWareHouses_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).EndInit();
             this.ResumeLayout(false);
+
         }
 
         private System.Windows.Forms.DataGridView dataGridView;
