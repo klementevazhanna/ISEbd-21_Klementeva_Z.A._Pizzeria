@@ -139,7 +139,7 @@ namespace PizzeriaFileImplement.Implements
             };
         }
 
-        public bool WriteOffComponents(Dictionary<int, (string, int)> pizzaIngredients, int pizzaCount)
+        public bool WriteOffIngredients(Dictionary<int, (string, int)> pizzaIngredients, int pizzaCount)
         {
             foreach (var pizzaIngredient in pizzaIngredients)
             {

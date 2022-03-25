@@ -164,7 +164,7 @@ namespace PizzaShopListImplement.Implements
             };
         }
 
-        public bool WriteOffComponents(Dictionary<int, (string, int)> pizzaIngredients, int pizzaCount)
+        public bool WriteOffIngredients(Dictionary<int, (string, int)> pizzaIngredients, int pizzaCount)
         {
             throw new NotImplementedException();
         }

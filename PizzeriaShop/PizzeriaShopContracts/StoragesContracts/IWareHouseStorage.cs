@@ -18,6 +18,6 @@ namespace PizzeriaShopContracts.StoragesContracts
 
         void Delete(WareHouseBindingModel model);
 
-        bool WriteOffComponents(Dictionary<int, (string, int)> pizzaIngredients, int pizzaCount);
+        bool WriteOffIngredients(Dictionary<int, (string, int)> pizzaIngredients, int pizzaCount);
     }
 }

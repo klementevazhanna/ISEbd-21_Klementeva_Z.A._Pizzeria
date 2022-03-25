@@ -59,7 +59,7 @@ namespace PizzeriaShopBusinessLogic.BusinessLogics
             {
                 throw new Exception("Заказ не в статусе \"Принят\"");
             }
-            if (!_wareHouseStorage.WriteOffComponents(
+            if (!_wareHouseStorage.WriteOffIngredients(
                 _pizzaStorage.GetElement(
                     new PizzaBindingModel { Id = order.PizzaId }
                 ).PizzaIngredients, 
