@@ -43,7 +43,8 @@ namespace PizzeriaDatabaseImplement.Implements
             {
                 return context.Orders
                     .Include(rec => rec.Pizza)
-                    .Where(rec => rec.PizzaId == model.PizzaId)
+                    .Where(rec=>rec.PizzaId == model.PizzaId ||
+                        (model.DateFrom.GetHashCode() != 0 && model.DateTo.GetHashCode() != 0 && rec.DateCreate >= model.DateFrom && rec.DateCreate <= model.DateTo))
                     .Select(rec => new OrderViewModel
                     {
                         Id = rec.Id,

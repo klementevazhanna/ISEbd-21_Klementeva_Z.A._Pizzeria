@@ -32,7 +32,8 @@ namespace PizzeriaFileImplement.Implements
             }
 
             return source.Orders
-                .Where(recOrder => recOrder.PizzaId == model.PizzaId)
+                .Where(rec => rec.PizzaId == model.PizzaId ||
+                        (model.DateFrom.GetHashCode() != 0 && model.DateTo.GetHashCode() != 0 && rec.DateCreate >= model.DateFrom && rec.DateCreate <= model.DateTo))
                 .Select(CreateModel)
                 .ToList();
         }

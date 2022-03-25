@@ -63,7 +63,8 @@ namespace PizzaShopListImplement.Implements
             List<OrderViewModel> result = new List<OrderViewModel>();
             foreach (var order in source.Orders)
             {
-                if (order.PizzaId == model.PizzaId)
+                if (order.PizzaId == model.PizzaId ||
+                        (model.DateFrom.GetHashCode()!=0 && model.DateTo.GetHashCode()!=0 && order.DateCreate>=model.DateFrom&&order.DateCreate <=model.DateTo))
                 {
                     result.Add(CreateModel(order));
                 }

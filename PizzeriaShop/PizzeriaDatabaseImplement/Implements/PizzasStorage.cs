@@ -141,8 +141,10 @@ namespace PizzeriaDatabaseImplement.Implements
             if (model.Id.HasValue)
             {
                 var pizzaIngredients = context.PizzaIngredients.Where(rec => rec.PizzaId == model.Id.Value).ToList();
+                // удалили те, которых нет в модели
                 context.PizzaIngredients.RemoveRange(pizzaIngredients.Where(rec => !model.PizzaIngredients.ContainsKey(rec.IngredientId)).ToList());
                 context.SaveChanges();
+                // обновили количество у существующих записей
                 foreach (var updateIngredient in pizzaIngredients)
                 {
                     updateIngredient.Count = model.PizzaIngredients[updateIngredient.IngredientId].Item2;

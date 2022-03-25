@@ -1,5 +1,7 @@
 using PizzeriaDatabaseImplement.Implements;
 using PizzeriaShopBusinessLogic.BusinessLogics;
+using PizzeriaShopBusinessLogic.OfficePackage;
+using PizzeriaShopBusinessLogic.OfficePackage.Implements;
 using PizzeriaShopContracts.BusinessLogicsContracts;
 using PizzeriaShopContracts.StoragesContracts;
 using System;
@@ -47,6 +49,14 @@ namespace PizzeriaShopView
             currentContainer.RegisterType<IOrderLogic, OrderLogic>(new
             HierarchicalLifetimeManager());
             currentContainer.RegisterType<IPizzaLogic, PizzaLogic>(new
+            HierarchicalLifetimeManager());
+            currentContainer.RegisterType<IReportLogic, ReportLogic>(new
+            HierarchicalLifetimeManager());
+            currentContainer.RegisterType<AbstractSaveToExcel, SaveToExcel>(new
+            HierarchicalLifetimeManager());
+            currentContainer.RegisterType<AbstractSaveToWord, SaveToWord>(new
+            HierarchicalLifetimeManager());
+            currentContainer.RegisterType<AbstractSaveToPdf, SaveToPdf>(new
             HierarchicalLifetimeManager());
             return currentContainer;
         }

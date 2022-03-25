@@ -39,6 +39,10 @@ namespace PizzeriaShopView
             this.buttonDeliveryOrder = new System.Windows.Forms.Button();
             this.buttonRef = new System.Windows.Forms.Button();
             this.dataGridView = new System.Windows.Forms.DataGridView();
+            this.отчетыToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.списокПиццToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.пиццыСИнгредиентамиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.списокЗаказовToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             this.SuspendLayout();
@@ -47,7 +51,8 @@ namespace PizzeriaShopView
             // 
             this.menuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.справочникиToolStripMenuItem});
+            this.справочникиToolStripMenuItem,
+            this.отчетыToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(983, 28);
@@ -66,7 +71,7 @@ namespace PizzeriaShopView
             // ингредиентыToolStripMenuItem
             // 
             this.ингредиентыToolStripMenuItem.Name = "ингредиентыToolStripMenuItem";
-            this.ингредиентыToolStripMenuItem.Size = new System.Drawing.Size(186, 26);
+            this.ингредиентыToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
             this.ингредиентыToolStripMenuItem.Text = "Ингредиенты";
             this.ингредиентыToolStripMenuItem.Click += new System.EventHandler(this.ингредиентыToolStripMenuItem_Click);
             // 
@@ -146,6 +151,37 @@ namespace PizzeriaShopView
             this.dataGridView.Size = new System.Drawing.Size(727, 412);
             this.dataGridView.TabIndex = 6;
             // 
+            // отчетыToolStripMenuItem
+            // 
+            this.отчетыToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.списокПиццToolStripMenuItem,
+            this.пиццыСИнгредиентамиToolStripMenuItem,
+            this.списокЗаказовToolStripMenuItem});
+            this.отчетыToolStripMenuItem.Name = "отчетыToolStripMenuItem";
+            this.отчетыToolStripMenuItem.Size = new System.Drawing.Size(73, 24);
+            this.отчетыToolStripMenuItem.Text = "Отчеты";
+            // 
+            // списокПиццToolStripMenuItem
+            // 
+            this.списокПиццToolStripMenuItem.Name = "списокПиццToolStripMenuItem";
+            this.списокПиццToolStripMenuItem.Size = new System.Drawing.Size(265, 26);
+            this.списокПиццToolStripMenuItem.Text = "Список пицц";
+            this.списокПиццToolStripMenuItem.Click += new System.EventHandler(this.списокПиццToolStripMenuItem_Click);
+            // 
+            // пиццыСИнгредиентамиToolStripMenuItem
+            // 
+            this.пиццыСИнгредиентамиToolStripMenuItem.Name = "пиццыСИнгредиентамиToolStripMenuItem";
+            this.пиццыСИнгредиентамиToolStripMenuItem.Size = new System.Drawing.Size(265, 26);
+            this.пиццыСИнгредиентамиToolStripMenuItem.Text = "Пиццы с ингредиентами";
+            this.пиццыСИнгредиентамиToolStripMenuItem.Click += new System.EventHandler(this.пиццыСИнгредиентамиToolStripMenuItem_Click);
+            // 
+            // списокЗаказовToolStripMenuItem
+            // 
+            this.списокЗаказовToolStripMenuItem.Name = "списокЗаказовToolStripMenuItem";
+            this.списокЗаказовToolStripMenuItem.Size = new System.Drawing.Size(265, 26);
+            this.списокЗаказовToolStripMenuItem.Text = "Список заказов";
+            this.списокЗаказовToolStripMenuItem.Click += new System.EventHandler(this.списокЗаказовToolStripMenuItem_Click);
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -183,6 +219,10 @@ namespace PizzeriaShopView
         private System.Windows.Forms.Button buttonDeliveryOrder;
         private System.Windows.Forms.Button buttonRef;
         private System.Windows.Forms.DataGridView dataGridView;
+        private System.Windows.Forms.ToolStripMenuItem отчетыToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem списокПиццToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem пиццыСИнгредиентамиToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem списокЗаказовToolStripMenuItem;
     }
 }
 
