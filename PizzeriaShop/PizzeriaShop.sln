@@ -13,7 +13,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PizzeriaShopBusinessLogic",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PizzeriaShopContracts", "PizzeriaShopContracts\PizzeriaShopContracts.csproj", "{5B530F13-6247-4F57-B4E2-D911EF35A47C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PizzeriaDatabaseImplement", "PizzeriaDatabaseImplement\PizzeriaDatabaseImplement.csproj", "{D3A79EF1-302C-49C8-8112-E995D3F0D65F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PizzeriaDatabaseImplement", "PizzeriaDatabaseImplement\PizzeriaDatabaseImplement.csproj", "{D3A79EF1-302C-49C8-8112-E995D3F0D65F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PizzeriaShopRestApi", "PizzeriaShopRestApi\PizzeriaShopRestApi.csproj", "{1E9C9F83-EB11-4E12-9D84-FC838530756C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PizzeriaShopClientApp", "PizzeriaShopClientApp\PizzeriaShopClientApp.csproj", "{B2759E73-F593-4BFD-A5D4-C17D4E0A4867}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +49,14 @@ Global
 		{D3A79EF1-302C-49C8-8112-E995D3F0D65F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D3A79EF1-302C-49C8-8112-E995D3F0D65F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D3A79EF1-302C-49C8-8112-E995D3F0D65F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1E9C9F83-EB11-4E12-9D84-FC838530756C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E9C9F83-EB11-4E12-9D84-FC838530756C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E9C9F83-EB11-4E12-9D84-FC838530756C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E9C9F83-EB11-4E12-9D84-FC838530756C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B2759E73-F593-4BFD-A5D4-C17D4E0A4867}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B2759E73-F593-4BFD-A5D4-C17D4E0A4867}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B2759E73-F593-4BFD-A5D4-C17D4E0A4867}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B2759E73-F593-4BFD-A5D4-C17D4E0A4867}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -17,9 +17,12 @@ namespace PizzeriaDatabaseImplement.Implements
             {
                 return context.Orders
                     .Include(rec => rec.Pizza)
+                    .Include(rec => rec.Client)
                     .Select(rec => new OrderViewModel
                     {
                         Id = rec.Id,
+                        ClientId = rec.ClientId,
+                        ClientFIO = rec.Client.ClientFIO,
                         PizzaId = rec.PizzaId,
                         PizzaName = rec.Pizza.PizzaName,
                         Count = rec.Count,
@@ -43,11 +46,15 @@ namespace PizzeriaDatabaseImplement.Implements
             {
                 return context.Orders
                     .Include(rec => rec.Pizza)
-                    .Where(rec=>rec.PizzaId == model.PizzaId ||
-                        (model.DateFrom.GetHashCode() != 0 && model.DateTo.GetHashCode() != 0 && rec.DateCreate >= model.DateFrom && rec.DateCreate <= model.DateTo))
+                    .Include(rec => rec.Client)
+                    .Where(rec => (!model.DateFrom.HasValue && !model.DateTo.HasValue && rec.DateCreate.Date == model.DateCreate.Date) ||
+                    (model.DateFrom.HasValue && model.DateTo.HasValue && rec.DateCreate.Date >= model.DateFrom.Value.Date && rec.DateCreate.Date <= model.DateTo.Value.Date) ||
+                    (model.ClientId.HasValue && rec.ClientId == model.ClientId))
                     .Select(rec => new OrderViewModel
                     {
                         Id = rec.Id,
+                        ClientId = rec.ClientId,
+                        ClientFIO = rec.Client.ClientFIO,
                         PizzaId = rec.PizzaId,
                         PizzaName = rec.Pizza.PizzaName,
                         Count = rec.Count,
@@ -69,11 +76,13 @@ namespace PizzeriaDatabaseImplement.Implements
 
             using (var context = new PizzeriaShopDatabase())
             {
-                Order order = context.Orders.Include(rec => rec.Pizza).FirstOrDefault(rec => rec.Id == model.Id);
+                Order order = context.Orders.Include(rec => rec.Pizza).Include(rec => rec.Client).FirstOrDefault(rec => rec.Id == model.Id);
                 return order != null ?
                 new OrderViewModel
                 {
                     Id = order.Id,
+                    ClientId = order.ClientId,
+                    ClientFIO = order.Client.ClientFIO,
                     PizzaId = order.PizzaId,
                     PizzaName = order.Pizza.PizzaName,
                     Count = order.Count,
@@ -92,6 +101,7 @@ namespace PizzeriaDatabaseImplement.Implements
             {
                 var order = new Order
                 {
+                    ClientId = model.ClientId.Value,
                     PizzaId = model.PizzaId,
                     Count = model.Count,
                     Sum = model.Sum,
@@ -115,6 +125,7 @@ namespace PizzeriaDatabaseImplement.Implements
                 {
                     throw new Exception("Элемент не найден");
                 }
+                order.ClientId = model.ClientId.Value;
                 order.PizzaId = model.PizzaId;
                 order.Count = model.Count;
                 order.Sum = model.Sum;

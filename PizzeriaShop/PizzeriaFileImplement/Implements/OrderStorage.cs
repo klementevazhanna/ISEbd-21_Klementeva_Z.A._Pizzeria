@@ -10,16 +10,16 @@ namespace PizzeriaFileImplement.Implements
 {
     public class OrderStorage : IOrderStorage
     {
-        private readonly FileDataListSingleton source;
+        private readonly FileDataListSingleton _source;
 
         public OrderStorage()
         {
-            source = FileDataListSingleton.GetInstance();
+            _source = FileDataListSingleton.GetInstance();
         }
 
         public List<OrderViewModel> GetFullList()
         {
-            return source.Orders
+            return _source.Orders
                 .Select(CreateModel)
                 .ToList();
         }
@@ -31,9 +31,10 @@ namespace PizzeriaFileImplement.Implements
                 return null;
             }
 
-            return source.Orders
-                .Where(rec => rec.PizzaId == model.PizzaId ||
-                        (model.DateFrom.GetHashCode() != 0 && model.DateTo.GetHashCode() != 0 && rec.DateCreate >= model.DateFrom && rec.DateCreate <= model.DateTo))
+            return _source.Orders
+                .Where(rec => (!model.DateFrom.HasValue && !model.DateTo.HasValue && rec.DateCreate.Date == model.DateCreate.Date) ||
+                (model.DateFrom.HasValue && model.DateTo.HasValue && rec.DateCreate.Date >= model.DateFrom.Value.Date && rec.DateCreate.Date <= model.DateTo.Value.Date) ||
+                (model.ClientId.HasValue && rec.ClientId == model.ClientId))
                 .Select(CreateModel)
                 .ToList();
         }
@@ -45,20 +46,20 @@ namespace PizzeriaFileImplement.Implements
                 return null;
             }
 
-            Order order = source.Orders.FirstOrDefault(recOder => recOder.Id == model.Id);
+            Order order = _source.Orders.FirstOrDefault(recOder => recOder.Id == model.Id);
             return order != null ? CreateModel(order) : null;
         }
 
         public void Insert(OrderBindingModel model)
         {
-            int maxId = source.Orders.Count > 0 ? source.Orders.Max(recOder => recOder.Id) : 0;
+            int maxId = _source.Orders.Count > 0 ? _source.Orders.Max(recOder => recOder.Id) : 0;
             var order = new Order { Id = maxId + 1 };
-            source.Orders.Add(CreateModel(model, order));
+            _source.Orders.Add(CreateModel(model, order));
         }
 
         public void Update(OrderBindingModel model)
         {
-            Order order = source.Orders.FirstOrDefault(recOder => recOder.Id == model.Id);
+            Order order = _source.Orders.FirstOrDefault(recOder => recOder.Id == model.Id);
             if (order == null)
             {
                 throw new Exception("Заказ не найден");
@@ -68,10 +69,10 @@ namespace PizzeriaFileImplement.Implements
 
         public void Delete(OrderBindingModel model)
         {
-            Order order = source.Orders.FirstOrDefault(recOrder => recOrder.Id == model.Id);
+            Order order = _source.Orders.FirstOrDefault(recOrder => recOrder.Id == model.Id);
             if (order != null)
             {
-                source.Orders.Remove(order);
+                _source.Orders.Remove(order);
             }
             else
             {
@@ -81,6 +82,7 @@ namespace PizzeriaFileImplement.Implements
 
         private Order CreateModel(OrderBindingModel model, Order order)
         {
+            order.ClientId = (int)model.ClientId;
             order.PizzaId = model.PizzaId;
             order.Count = model.Count;
             order.Sum = model.Sum;
@@ -95,13 +97,15 @@ namespace PizzeriaFileImplement.Implements
             return new OrderViewModel
             {
                 Id = order.Id,
-                PizzaName = source.Pizzas.FirstOrDefault(pizza => pizza.Id == order.PizzaId)?.PizzaName,
+                PizzaName = _source.Pizzas.FirstOrDefault(pizza => pizza.Id == order.PizzaId)?.PizzaName,
                 PizzaId = order.PizzaId,
                 Count = order.Count,
                 Sum = order.Sum,
                 Status = order.Status,
                 DateCreate = order.DateCreate,
-                DateImplement = order.DateImplement
+                DateImplement = order.DateImplement,
+                ClientId = order.ClientId,
+                ClientFIO = _source.Clients.FirstOrDefault(rec => rec.Id == order.ClientId)?.ClientFIO,
             };
         }
     }

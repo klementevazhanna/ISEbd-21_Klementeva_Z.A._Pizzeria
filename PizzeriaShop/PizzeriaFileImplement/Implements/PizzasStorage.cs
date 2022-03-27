@@ -50,10 +50,10 @@ namespace PizzeriaFileImplement.Implements
         public void Insert(PizzaBindingModel model)
         {
             int maxId = source.Pizzas.Count > 0 ? source.Pizzas.Max(recPizza => recPizza.Id) : 0;
-            var pizza = new Pizza 
-            { 
-                Id = maxId + 1, 
-                PizzaIngredients = new Dictionary<int, int>() 
+            var pizza = new Pizza
+            {
+                Id = maxId + 1,
+                PizzaIngredients = new Dictionary<int, int>()
             };
             source.Pizzas.Add(CreateModel(model, pizza));
         }

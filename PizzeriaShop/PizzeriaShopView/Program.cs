@@ -44,6 +44,8 @@ namespace PizzeriaShopView
             HierarchicalLifetimeManager());
             currentContainer.RegisterType<IPizzaStorage, PizzasStorage>(new
             HierarchicalLifetimeManager());
+            currentContainer.RegisterType<IClientStorage, ClientStorage>(new
+            HierarchicalLifetimeManager());
             currentContainer.RegisterType<IIngredientLogic, IngredientLogic>(new
             HierarchicalLifetimeManager());
             currentContainer.RegisterType<IOrderLogic, OrderLogic>(new
@@ -51,6 +53,8 @@ namespace PizzeriaShopView
             currentContainer.RegisterType<IPizzaLogic, PizzaLogic>(new
             HierarchicalLifetimeManager());
             currentContainer.RegisterType<IReportLogic, ReportLogic>(new
+            HierarchicalLifetimeManager());
+            currentContainer.RegisterType<IClientLogic, ClientLogic>(new
             HierarchicalLifetimeManager());
             currentContainer.RegisterType<AbstractSaveToExcel, SaveToExcel>(new
             HierarchicalLifetimeManager());

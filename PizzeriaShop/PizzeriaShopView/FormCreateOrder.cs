@@ -13,17 +13,29 @@ namespace PizzeriaShopView
 
         private readonly IOrderLogic _logicO;
 
-        public FormCreateOrder(IPizzaLogic logicP, IOrderLogic logicO)
+        private readonly IClientLogic _logicС;
+
+        public FormCreateOrder(IPizzaLogic logicP, IOrderLogic logicO, IClientLogic logicС)
         {
             InitializeComponent();
             _logicP = logicP;
             _logicO = logicO;
+            _logicС = logicС;
         }
 
         private void FormCreateOrder_Load(object sender, EventArgs e)
         {
             try
             {
+                List<ClientViewModel> listC = _logicС.Read(null);
+                if (listC != null)
+                {
+                    comboBoxClient.DisplayMember = "ClientFIO";
+                    comboBoxClient.ValueMember = "Id";
+                    comboBoxClient.DataSource = listC;
+                    comboBoxClient.SelectedItem = null;
+                }
+
                 List<PizzaViewModel> listP = _logicP.Read(null);
                 if (listP != null)
                 {
@@ -91,6 +103,7 @@ namespace PizzeriaShopView
             {
                 _logicO.CreateOrder(new CreateOrderBindingModel
                 {
+                    ClientId = Convert.ToInt32(comboBoxClient.SelectedValue),
                     PizzaId = Convert.ToInt32(comboBoxPizza.SelectedValue),
                     Count = Convert.ToInt32(textBoxCount.Text),
                     Sum = Convert.ToDecimal(textBoxSum.Text)

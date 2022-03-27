@@ -15,6 +15,7 @@ namespace PizzeriaFileImplement
         private readonly string IngredientFileName = "Ingredient.xml";
         private readonly string PizzaFileName = "Pizza.xml";
         private readonly string OrderFileName = "Order.xml";
+        private readonly string ClientFileName = "Client.xml";
 
         public List<Ingredient> Ingredients { get; set; }
 
@@ -22,11 +23,14 @@ namespace PizzeriaFileImplement
 
         public List<Order> Orders { get; set; }
 
+        public List<Client> Clients { get; set; }
+
         private FileDataListSingleton()
         {
             Ingredients = LoadIngredients();
             Pizzas = LoadPizzas();
             Orders = LoadOrders();
+            Clients = LoadClients();
         }
 
         public static FileDataListSingleton GetInstance()
@@ -44,6 +48,7 @@ namespace PizzeriaFileImplement
             SaveIngredients();
             SavePizzas();
             SaveOrders();
+            SaveClients();
         }
 
         private List<Ingredient> LoadIngredients()
@@ -114,12 +119,36 @@ namespace PizzeriaFileImplement
                     list.Add(new Order
                     {
                         Id = Convert.ToInt32(order.Attribute("Id").Value),
+                        ClientId = Convert.ToInt32(order.Element("ClientId").Value),
                         PizzaId = Convert.ToInt32(order.Element("PizzaId").Value),
                         Count = Convert.ToInt32(order.Element("Count").Value),
                         Sum = Convert.ToDecimal(order.Element("Sum").Value),
                         Status = (OrderStatus)Convert.ToInt32(order.Element("Status").Value),
                         DateCreate = Convert.ToDateTime(order.Element("DateCreate").Value),
                         DateImplement = !string.IsNullOrEmpty(order.Element("DateImplement").Value) ? Convert.ToDateTime(order.Element("DateImplement").Value) : (DateTime?)null
+                    });
+                }
+            }
+            return list;
+        }
+
+        private List<Client> LoadClients()
+        {
+            var list = new List<Client>();
+
+            if (File.Exists(ClientFileName))
+            {
+                XDocument xDocument = XDocument.Load(ClientFileName);
+                var xElements = xDocument.Root.Elements("Client").ToList();
+
+                foreach (var client in xElements)
+                {
+                    list.Add(new Client
+                    {
+                        Id = Convert.ToInt32(client.Attribute("Id").Value),
+                        ClientFIO = client.Element("ClientFIO").Value,
+                        Email = client.Element("Email").Value,
+                        Password = client.Element("Password").Value,
                     });
                 }
             }
@@ -181,6 +210,7 @@ namespace PizzeriaFileImplement
                 {
                     xElement.Add(new XElement("Order",
                         new XAttribute("Id", order.Id),
+                        new XElement("ClientId", order.ClientId),
                         new XElement("PizzaId", order.PizzaId),
                         new XElement("Count", order.Count),
                         new XElement("Sum", order.Sum),
@@ -190,6 +220,26 @@ namespace PizzeriaFileImplement
                 }
                 XDocument xDocument = new XDocument(xElement);
                 xDocument.Save(OrderFileName);
+            }
+        }
+
+        private void SaveClients()
+        {
+            if (Clients != null)
+            {
+                var xElement = new XElement("Clients");
+
+                foreach (var client in Clients)
+                {
+                    xElement.Add(new XElement("Client",
+                    new XAttribute("Id", client.Id),
+                    new XElement("ClientFIO", client.ClientFIO),
+                    new XElement("Email", client.Email),
+                    new XElement("Password", client.Password)));
+                }
+
+                XDocument xDocument = new XDocument(xElement);
+                xDocument.Save(ClientFileName);
             }
         }
     }

@@ -34,6 +34,7 @@ namespace PizzeriaShopBusinessLogic.BusinessLogics
         {
             _orderStorage.Insert(new OrderBindingModel
             {
+                ClientId = model.ClientId,
                 PizzaId = model.PizzaId,
                 Count = model.Count,
                 Sum = model.Sum,
@@ -56,6 +57,7 @@ namespace PizzeriaShopBusinessLogic.BusinessLogics
             _orderStorage.Update(new OrderBindingModel
             {
                 Id = order.Id,
+                ClientId = order.ClientId,
                 PizzaId = order.PizzaId,
                 Count = order.Count,
                 Sum = order.Sum,
@@ -78,6 +80,7 @@ namespace PizzeriaShopBusinessLogic.BusinessLogics
             _orderStorage.Update(new OrderBindingModel
             {
                 Id = order.Id,
+                ClientId = order.ClientId,
                 PizzaId = order.PizzaId,
                 Count = order.Count,
                 Sum = order.Sum,
@@ -104,6 +107,7 @@ namespace PizzeriaShopBusinessLogic.BusinessLogics
             _orderStorage.Update(new OrderBindingModel
             {
                 Id = order.Id,
+                ClientId = order.ClientId,
                 PizzaId = order.PizzaId,
                 Count = order.Count,
                 Sum = order.Sum,
