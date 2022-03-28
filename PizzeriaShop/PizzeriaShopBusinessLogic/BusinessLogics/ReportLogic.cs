@@ -16,17 +16,20 @@ namespace PizzeriaShopBusinessLogic.BusinessLogics
 
         private readonly IOrderStorage _orderStorage;
 
+        private readonly IWareHouseStorage _wareHouseStorage;
+
         private readonly AbstractSaveToExcel _saveToExcel;
 
         private readonly AbstractSaveToWord _saveToWord;
 
         private readonly AbstractSaveToPdf _saveToPdf;
 
-        public ReportLogic(IPizzaStorage pizzaStorage, IOrderStorage orderStorage,
+        public ReportLogic(IPizzaStorage pizzaStorage, IOrderStorage orderStorage, IWareHouseStorage wareHouseStorage,
             AbstractSaveToExcel saveToExcel, AbstractSaveToWord saveToWord, AbstractSaveToPdf saveToPdf)
         {
             _pizzaStorage = pizzaStorage;
             _orderStorage = orderStorage;
+            _wareHouseStorage = wareHouseStorage;
             _saveToExcel = saveToExcel;
             _saveToWord = saveToWord;
             _saveToPdf = saveToPdf;
@@ -72,6 +75,41 @@ namespace PizzeriaShopBusinessLogic.BusinessLogics
            .ToList();
         }
 
+        public List<ReportOrdersByDateViewModel> GetOrdersByDate()
+        {
+            return _orderStorage.GetFullList()
+                .GroupBy(order => order.DateCreate.ToShortDateString())
+                .Select(rec => new ReportOrdersByDateViewModel
+                {
+                    Date = Convert.ToDateTime(rec.Key),
+                    Count = rec.Count(),
+                    Sum = rec.Sum(order => order.Sum)
+                })
+                .ToList();
+        }
+
+        public List<ReportWareHouseIngredientViewModel> GetWareHouseIngredient()
+        {
+            var wareHouses = _wareHouseStorage.GetFullList();
+            var list = new List<ReportWareHouseIngredientViewModel>();
+            foreach (var wareHouse in wareHouses)
+            {
+                var record = new ReportWareHouseIngredientViewModel
+                {
+                    WareHouseName = wareHouse.WareHouseName,
+                    Ingredients = new List<Tuple<string, int>>(),
+                    TotalCount = 0
+                };
+                foreach (var ingredient in wareHouse.WareHouseIngredients)
+                {
+                    record.Ingredients.Add(new Tuple<string, int>(ingredient.Value.Item1, ingredient.Value.Item2));
+                    record.TotalCount += ingredient.Value.Item2;
+                }
+                list.Add(record);
+            }
+            return list;
+        }
+
         public void SavePizzasToWordFile(ReportBindingModel model)
         {
             _saveToWord.CreateDoc(new WordInfo
@@ -79,6 +117,16 @@ namespace PizzeriaShopBusinessLogic.BusinessLogics
                 FileName = model.FileName,
                 Title = "Список пицц",
                 Pizzas = _pizzaStorage.GetFullList()
+            });
+        }
+
+        public void SaveWareHousesToWordFile(ReportBindingModel model)
+        {
+            _saveToWord.CreateWareHousesDoc(new WordInfoWareHouses
+            {
+                FileName = model.FileName,
+                Title = "Список складов",
+                WareHouses = _wareHouseStorage.GetFullList()
             });
         }
 
@@ -92,6 +140,16 @@ namespace PizzeriaShopBusinessLogic.BusinessLogics
             });
         }
 
+        public void SaveWareHouseIngredientToExcelFile(ReportBindingModel model)
+        {
+            _saveToExcel.CreateReportWareHouses(new ExcelInfoWareHouses
+            {
+                FileName = model.FileName,
+                Title = "Список складов",
+                WareHouseIngredients = GetWareHouseIngredient()
+            });
+        }
+
         public void SaveOrdersToPdfFile(ReportBindingModel model)
         {
             _saveToPdf.CreateDoc(new PdfInfo
@@ -101,6 +159,16 @@ namespace PizzeriaShopBusinessLogic.BusinessLogics
                 DateFrom = model.DateFrom.Value,
                 DateTo = model.DateTo.Value,
                 Orders = GetOrders(model)
+            });
+        }
+
+        public void SaveOrdersByDateToPdfFile(ReportBindingModel model)
+        {
+            _saveToPdf.CreateDocOrderReportByDate(new PdfInfoOrderReportByDate
+            {
+                FileName = model.FileName,
+                Title = "Список заказов за весь период",
+                Orders = GetOrdersByDate()
             });
         }
     }
