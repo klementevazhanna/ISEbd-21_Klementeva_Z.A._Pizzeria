@@ -142,9 +142,6 @@
     <Reference Include="MigraDoc.RtfRendering, Version=1.50.5147.0, Culture=neutral, PublicKeyToken=f94615aa0424f9eb, processorArchitecture=MSIL">
       <HintPath>..\packages\PDFsharp-MigraDoc.1.50.5147\lib\net20\MigraDoc.RtfRendering.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.10.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="PdfSharp, Version=1.50.5147.0, Culture=neutral, PublicKeyToken=f94615aa0424f9eb, processorArchitecture=MSIL">
       <HintPath>..\packages\PDFsharp-MigraDoc.1.50.5147\lib\net20\PdfSharp.dll</HintPath>
     </Reference>
@@ -260,11 +257,41 @@
     <Compile Include="FormReportOrders.Designer.cs">
       <DependentUpon>FormReportOrders.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormReportOrdersByDate.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormReportOrdersByDate.Designer.cs">
+      <DependentUpon>FormReportOrdersByDate.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormReportPizzaIngredients.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="FormReportPizzaIngredients.Designer.cs">
       <DependentUpon>FormReportPizzaIngredients.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormReplenishmentWareHouse.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormReplenishmentWareHouse.Designer.cs">
+      <DependentUpon>FormReplenishmentWareHouse.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormReportWareHouseIngredients.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormReportWareHouseIngredients.Designer.cs">
+      <DependentUpon>FormReportWareHouseIngredients.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormWareHouse.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormWareHouse.Designer.cs">
+      <DependentUpon>FormWareHouse.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormWareHouses.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormWareHouses.Designer.cs">
+      <DependentUpon>FormWareHouses.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -277,27 +304,53 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormIngredient.resx">
       <DependentUpon>FormIngredient.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="FormIngredientPizza.resx">
       <DependentUpon>FormIngredientPizza.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormIngredients.resx">
       <DependentUpon>FormIngredients.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="FormMain.resx">
       <DependentUpon>FormMain.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="FormPizza.resx">
       <DependentUpon>FormPizza.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="FormPizzas.resx">
       <DependentUpon>FormPizzas.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormReplenishmentWareHouse.resx">
+      <DependentUpon>FormReplenishmentWareHouse.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormReportOrdersByDate.resx">
+      <DependentUpon>FormReportOrdersByDate.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormReportWareHouseIngredients.resx">
+      <DependentUpon>FormReportWareHouseIngredients.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormWareHouse.resx">
+      <DependentUpon>FormWareHouse.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormWareHouses.resx">
+      <DependentUpon>FormWareHouses.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="FormReportOrders.resx">
       <DependentUpon>FormReportOrders.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="FormReportPizzaIngredients.resx">
       <DependentUpon>FormReportPizzaIngredients.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -309,8 +362,11 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <EmbeddedResource Include="ReportOrders.rdlc" />
+    <EmbeddedResource Include="ReportOrdersByDate.rdlc" />
     <None Include="packages.config" />
+    <None Include="Properties\DataSources\PizzeriaShopContracts.ViewModels.ReportOrdersByDateViewModel.datasource" />
     <None Include="Properties\DataSources\PizzeriaShopContracts.ViewModels.ReportOrdersViewModel.datasource" />
+    <None Include="Properties\DataSources\PizzeriaShopContracts.ViewModels.ReportWareHouseIngredientViewModel.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
