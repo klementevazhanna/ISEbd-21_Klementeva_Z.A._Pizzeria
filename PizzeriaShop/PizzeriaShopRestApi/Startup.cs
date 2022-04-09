@@ -35,7 +35,7 @@ namespace PizzeriaShopRestApi
             services.AddTransient<IWareHouseLogic, WareHouseLogic>();
             services.AddTransient<IIngredientLogic, IngredientLogic>();
 
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "PizzeriaShopRestApi", Version = "v1" });

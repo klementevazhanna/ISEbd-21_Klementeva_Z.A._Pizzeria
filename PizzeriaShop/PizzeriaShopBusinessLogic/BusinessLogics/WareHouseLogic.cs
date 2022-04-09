@@ -38,7 +38,7 @@ namespace PizzeriaShopBusinessLogic.BusinessLogics
             {
                 WareHouseName = model.WareHouseName
             });
-            if (element != null && element.WareHouseName == model.WareHouseName)
+            if (element != null && element.Id != model.Id)
             {
                 throw new Exception("Уже есть склад с таким названием");
             }
