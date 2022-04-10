@@ -13,16 +13,22 @@ namespace PizzeriaFileImplement
         private static FileDataListSingleton instance;
 
         private readonly string IngredientFileName = "Ingredient.xml";
+
         private readonly string PizzaFileName = "Pizza.xml";
+
         private readonly string OrderFileName = "Order.xml";
         private readonly string ClientFileName = "Client.xml";
         private readonly string ImplementerFileName = "Implementer.xml";
+
+        private readonly string WareHouseFileName = "WareHouse.xml";
 
         public List<Ingredient> Ingredients { get; set; }
 
         public List<Pizza> Pizzas { get; set; }
 
         public List<Order> Orders { get; set; }
+
+        public List<WareHouse> WareHouses { get; set; }
 
         public List<Client> Clients { get; set; }
 
@@ -33,6 +39,7 @@ namespace PizzeriaFileImplement
             Ingredients = LoadIngredients();
             Pizzas = LoadPizzas();
             Orders = LoadOrders();
+            WareHouses = LoadWareHouses();
             Clients = LoadClients();
             Implementers = LoadImplementers();
         }
@@ -52,6 +59,7 @@ namespace PizzeriaFileImplement
             SaveIngredients();
             SavePizzas();
             SaveOrders();
+            SaveWareHouses();
             SaveClients();
             SaveImplementers();
         }
@@ -92,7 +100,7 @@ namespace PizzeriaFileImplement
                 {
                     var pizzaIngredients = new Dictionary<int, int>();
 
-                    foreach (var ingredient in pizza.Element("PizzaIngredients").Elements("PizzaIngredients").ToList())
+                    foreach (var ingredient in pizza.Element("PizzaIngredients").Elements("PizzaIngredient").ToList())
                     {
                         pizzaIngredients.Add(Convert.ToInt32(ingredient.Element("Key").Value), Convert.ToInt32(ingredient.Element("Value").Value));
                     }
@@ -133,6 +141,40 @@ namespace PizzeriaFileImplement
                         DateCreate = Convert.ToDateTime(order.Element("DateCreate").Value),
                         DateImplement = !string.IsNullOrEmpty(order.Element("DateImplement").Value) ? Convert.ToDateTime(order.Element("DateImplement").Value) : (DateTime?)null
                     });
+                }
+            }
+            return list;
+        }
+
+        private List<WareHouse> LoadWareHouses()
+        {
+            var list = new List<WareHouse>();
+
+            if (File.Exists(WareHouseFileName))
+            {
+                XDocument xDocument = XDocument.Load(WareHouseFileName);
+                var xElements = xDocument.Root.Elements("WareHouse").ToList();
+
+                foreach (var elem in xElements)
+                {
+                    var wareHouseIngredients = new Dictionary<int, int>();
+                    foreach (var ingredient in elem.Element("WareHouseIngredients").Elements("WareHouseIngredient").ToList())
+                    {
+                        wareHouseIngredients.Add(Convert.ToInt32(ingredient.Element("Key").Value), Convert.ToInt32(ingredient.Element("Value").Value));
+                    }
+
+                    list.Add(new WareHouse
+                    {
+                        Id = Convert.ToInt32(elem.Attribute("Id").Value),
+                        WareHouseName = elem.Element("WareHouseName").Value,
+                        ResponsiblePersonFIO = elem.Element("ResponsiblePersonFIO").Value,
+                        WareHouseIngredients = wareHouseIngredients
+                    });
+
+                    if (elem.Element("DateCreate").Value != "")
+                    {
+                        list.Last().DateCreate = DateTime.ParseExact(elem.Element("DateCreate").Value, "d.M.yyyy H:m:s", null);
+                    }
                 }
             }
             return list;
@@ -250,6 +292,40 @@ namespace PizzeriaFileImplement
                 }
                 XDocument xDocument = new XDocument(xElement);
                 xDocument.Save(OrderFileName);
+            }
+        }
+
+        private void SaveWareHouses()
+        {
+            if (WareHouses != null)
+            {
+                var xElement = new XElement("WareHouses");
+
+                foreach (var wareHouse in WareHouses)
+                {
+                    var ingredients = new XElement("WareHouseIngredients");
+
+                    foreach (var ingredient in wareHouse.WareHouseIngredients)
+                    {
+                        ingredients.Add(new XElement(
+                            "WareHouseIngredient",
+                            new XElement("Key", ingredient.Key),
+                            new XElement("Value", ingredient.Value)
+                        ));
+                    }
+
+                    xElement.Add(new XElement(
+                        "WareHouse",
+                        new XAttribute("Id", wareHouse.Id),
+                        new XElement("WareHouseName", wareHouse.WareHouseName),
+                        new XElement("ResponsiblePersonFIO", wareHouse.ResponsiblePersonFIO),
+                        new XElement("DateCreate", wareHouse.DateCreate.ToString()),
+                        ingredients
+                    ));
+                }
+
+                XDocument xDocument = new XDocument(xElement);
+                xDocument.Save(WareHouseFileName);
             }
         }
 

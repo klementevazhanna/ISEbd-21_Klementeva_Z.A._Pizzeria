@@ -9,7 +9,7 @@ namespace PizzeriaShopRestApi.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    public class MainController
+    public class MainController : Controller
     {
         private readonly IOrderLogic _order;
 
