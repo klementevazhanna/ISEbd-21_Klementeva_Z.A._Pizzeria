@@ -16,6 +16,8 @@ namespace PizzeriaShopBusinessLogic.BusinessLogics
 
         private readonly IPizzaStorage _pizzaStorage;
 
+        private readonly object locker = new();
+
         public OrderLogic(IOrderStorage orderStorage, IWareHouseStorage wareHouseStorage, IPizzaStorage pizzaStorage)
         {
             _orderStorage = orderStorage;
@@ -51,35 +53,45 @@ namespace PizzeriaShopBusinessLogic.BusinessLogics
 
         public void TakeOrderInWork(ChangeStatusBindingModel model)
         {
-            var order = _orderStorage.GetElement(new OrderBindingModel { Id = model.OrderId });
-            if (order == null)
+            lock (locker)
             {
-                throw new Exception("Не найден заказ");
+                var order = _orderStorage.GetElement(new OrderBindingModel { Id = model.OrderId });
+                if (order == null)
+                {
+                    throw new Exception("Не найден заказ");
+                }
+                if (order.Status != OrderStatus.Принят && order.Status != OrderStatus.Требуются_материалы)
+                {
+                    throw new Exception("Заказ не взят к выполнению");
+                }
+
+                var updatingOrder = new OrderBindingModel
+                {
+                    Id = order.Id,
+                    ClientId = order.ClientId,
+                    ImplementerId = model.ImplementerId,
+                    PizzaId = order.PizzaId,
+                    Count = order.Count,
+                    Sum = order.Sum,
+                    DateCreate = order.DateCreate
+                };
+
+                if (!_wareHouseStorage.WriteOffIngredients(
+                    _pizzaStorage.GetElement(
+                        new PizzaBindingModel { Id = order.PizzaId }
+                    ).PizzaIngredients,
+                    order.Count
+                ))
+                {
+                    updatingOrder.Status = OrderStatus.Требуются_материалы;
+                }
+                else
+                {
+                    updatingOrder.Status = OrderStatus.Выполняется;
+                }
+
+                _orderStorage.Update(updatingOrder);
             }
-            if (order.Status != OrderStatus.Принят)
-            {
-                throw new Exception("Заказ не в статусе \"Принят\"");
-            }
-            if (!_wareHouseStorage.WriteOffIngredients(
-                _pizzaStorage.GetElement(
-                    new PizzaBindingModel { Id = order.PizzaId }
-                ).PizzaIngredients, 
-                order.Count
-            ))
-            {
-                throw new Exception("Не хватает ингредиентов");
-            }
-            _orderStorage.Update(new OrderBindingModel
-            {
-                Id = order.Id,
-                ClientId = order.ClientId,
-                ImplementerId = model.ImplementerId,
-                PizzaId = order.PizzaId,
-                Count = order.Count,
-                Sum = order.Sum,
-                DateCreate = order.DateCreate,
-                Status = OrderStatus.Выполняется
-            });
         }
 
         public void FinishOrder(ChangeStatusBindingModel model)
@@ -89,22 +101,21 @@ namespace PizzeriaShopBusinessLogic.BusinessLogics
             {
                 throw new Exception("Не найден заказ");
             }
-            if (order.Status != OrderStatus.Выполняется)
+            if (order.Status == OrderStatus.Выполняется)
             {
-                throw new Exception("Заказ не в статусе \"Выполняется\"");
+                _orderStorage.Update(new OrderBindingModel
+                {
+                    Id = order.Id,
+                    ClientId = order.ClientId,
+                    ImplementerId = order.ImplementerId,
+                    PizzaId = order.PizzaId,
+                    Count = order.Count,
+                    Sum = order.Sum,
+                    DateCreate = order.DateCreate,
+                    DateImplement = DateTime.Now,
+                    Status = OrderStatus.Готов
+                });
             }
-            _orderStorage.Update(new OrderBindingModel
-            {
-                Id = order.Id,
-                ClientId = order.ClientId,
-                ImplementerId = order.ImplementerId,
-                PizzaId = order.PizzaId,
-                Count = order.Count,
-                Sum = order.Sum,
-                DateCreate = order.DateCreate,
-                DateImplement = DateTime.Now,
-                Status = OrderStatus.Готов
-            });
         }
 
         public void DeliveryOrder(ChangeStatusBindingModel model)
