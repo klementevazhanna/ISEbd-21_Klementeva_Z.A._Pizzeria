@@ -25,7 +25,7 @@ namespace PizzaShopListImplement.Implements
             order.Status = model.Status;
             order.DateCreate = model.DateCreate;
             order.DateImplement = model.DateImplement;
-
+            order.ImplementerId = model.ImplementerId;
             return order;
         }
 
@@ -40,6 +40,15 @@ namespace PizzaShopListImplement.Implements
                     break;
                 }
             }
+            string implementerFIO = null;
+            foreach (var implementer in source.Implementers)
+            {
+                if (implementer.Id == order.ImplementerId)
+                {
+                    implementerFIO = implementer.ImplementerFIO;
+                    break;
+                }
+            }
             return new OrderViewModel
             {
                 Id = order.Id,
@@ -51,7 +60,9 @@ namespace PizzaShopListImplement.Implements
                 DateCreate = order.DateCreate,
                 DateImplement = order.DateImplement,
                 ClientId = order.ClientId,
-                ClientFIO = clientFIO
+                ClientFIO = clientFIO,
+                ImplementerId = order.ImplementerId,
+                ImplementerFIO = implementerFIO
             };
         }
 
@@ -75,8 +86,10 @@ namespace PizzaShopListImplement.Implements
             foreach (var order in source.Orders)
             {
                 if ((!model.DateFrom.HasValue && !model.DateTo.HasValue && order.DateCreate.Date == model.DateCreate.Date) || 
-                    (model.DateFrom.HasValue && model.DateTo.HasValue && order.DateCreate.Date >= model.DateFrom.Value.Date && order.DateCreate.Date <= model.DateTo.Value.Date) || 
-                    (model.ClientId.HasValue && order.ClientId == model.ClientId))
+                    (model.DateFrom.HasValue && model.DateTo.HasValue && order.DateCreate.Date >= model.DateFrom.Value.Date && order.DateCreate.Date <= model.DateTo.Value.Date) ||
+                    (model.ClientId.HasValue && order.ClientId == model.ClientId) ||
+                    (model.SearchStatus.HasValue && model.SearchStatus.Value == order.Status) ||
+                    (model.ImplementerId.HasValue && order.ImplementerId == model.ImplementerId && model.Status == order.Status))
                 {
                     result.Add(CreateModel(order));
                 }

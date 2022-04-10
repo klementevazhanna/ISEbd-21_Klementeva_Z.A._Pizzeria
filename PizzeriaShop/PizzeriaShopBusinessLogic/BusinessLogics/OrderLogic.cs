@@ -58,6 +58,7 @@ namespace PizzeriaShopBusinessLogic.BusinessLogics
             {
                 Id = order.Id,
                 ClientId = order.ClientId,
+                ImplementerId = model.ImplementerId,
                 PizzaId = order.PizzaId,
                 Count = order.Count,
                 Sum = order.Sum,
@@ -81,6 +82,7 @@ namespace PizzeriaShopBusinessLogic.BusinessLogics
             {
                 Id = order.Id,
                 ClientId = order.ClientId,
+                ImplementerId = order.ImplementerId,
                 PizzaId = order.PizzaId,
                 Count = order.Count,
                 Sum = order.Sum,
@@ -108,6 +110,7 @@ namespace PizzeriaShopBusinessLogic.BusinessLogics
             {
                 Id = order.Id,
                 ClientId = order.ClientId,
+                ImplementerId = order.ImplementerId,
                 PizzaId = order.PizzaId,
                 Count = order.Count,
                 Sum = order.Sum,
