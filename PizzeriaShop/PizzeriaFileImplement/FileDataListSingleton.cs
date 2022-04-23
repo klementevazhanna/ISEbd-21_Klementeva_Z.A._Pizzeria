@@ -17,6 +17,7 @@ namespace PizzeriaFileImplement
         private readonly string OrderFileName = "Order.xml";
         private readonly string ClientFileName = "Client.xml";
         private readonly string ImplementerFileName = "Implementer.xml";
+        private readonly string MessageFileName = "Message.xml";
 
         public List<Ingredient> Ingredients { get; set; }
 
@@ -28,6 +29,8 @@ namespace PizzeriaFileImplement
 
         public List<Implementer> Implementers { get; set; }
 
+        public List<MessageInfo> Messages { get; set; }
+
         private FileDataListSingleton()
         {
             Ingredients = LoadIngredients();
@@ -35,6 +38,7 @@ namespace PizzeriaFileImplement
             Orders = LoadOrders();
             Clients = LoadClients();
             Implementers = LoadImplementers();
+            Messages = LoadMessages();
         }
 
         public static FileDataListSingleton GetInstance()
@@ -54,6 +58,7 @@ namespace PizzeriaFileImplement
             SaveOrders();
             SaveClients();
             SaveImplementers();
+            SaveMessages();
         }
 
         private List<Ingredient> LoadIngredients()
@@ -184,6 +189,31 @@ namespace PizzeriaFileImplement
             return list;
         }
 
+        private List<MessageInfo> LoadMessages()
+        {
+            var list = new List<MessageInfo>();
+
+            if (File.Exists(MessageFileName))
+            {
+                XDocument xDocument = XDocument.Load(MessageFileName);
+                var xElements = xDocument.Root.Elements("Message").ToList();
+
+                foreach (var elem in xElements)
+                {
+                    list.Add(new MessageInfo
+                    {
+                        MessageId = elem.Attribute("MessageId").Value,
+                        ClientId = Convert.ToInt32(elem.Element("ClientId").Value),
+                        SenderName = elem.Element("SenderName").Value,
+                        DateDelivery = Convert.ToDateTime(elem.Element("DateDelivery")?.Value),
+                        Subject = elem.Element("Subject").Value,
+                        Body = elem.Element("Body").Value,
+                    });
+                }
+            }
+            return list;
+        }
+
         private void SaveIngredients()
         {
             if (Ingredients != null)
@@ -290,6 +320,29 @@ namespace PizzeriaFileImplement
 
                 XDocument xDocument = new XDocument(xElement);
                 xDocument.Save(ImplementerFileName);
+            }
+        }
+
+        private void SaveMessages()
+        {
+            if (Messages != null)
+            {
+                var xElement = new XElement("Messages");
+
+                foreach (var message in Messages)
+                {
+                    xElement.Add(new XElement("Message",
+                    new XAttribute("MessageId", message.MessageId),
+                    new XElement("ClientId", message.ClientId),
+                    new XElement("SenderName", message.SenderName),
+                    new XElement("DateDelivery", message.DateDelivery),
+                    new XElement("Subject", message.Subject),
+                    new XElement("Body", message.Body)
+                    ));
+                }
+
+                XDocument xDocument = new XDocument(xElement);
+                xDocument.Save(MessageFileName);
             }
         }
     }

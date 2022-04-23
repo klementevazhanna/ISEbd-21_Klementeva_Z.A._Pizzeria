@@ -4,12 +4,17 @@ using PizzeriaShopContracts.StoragesContracts;
 using PizzeriaShopContracts.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace PizzeriaShopBusinessLogic.BusinessLogics
 {
     public class ClientLogic : IClientLogic
     {
         private readonly IClientStorage _clientStorage;
+
+        private readonly int _passwordMaxLength = 50;
+
+        private readonly int _passwordMinLength = 10;
 
         public ClientLogic(IClientStorage clientStorage)
         {
@@ -35,6 +40,14 @@ namespace PizzeriaShopBusinessLogic.BusinessLogics
             if (element != null && element.Id != model.Id)
             {
                 throw new Exception("Уже есть клиент с таким логином");
+            }
+            if (!Regex.IsMatch(model.Email, @"^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.\s]\w+)*$"))
+            {
+                throw new Exception("В качестве логина должна быть указана почта");
+            }
+            if (model.Password.Length > _passwordMaxLength || model.Password.Length < _passwordMinLength || !Regex.IsMatch(model.Password, @"^((\w+\d+\W+)|(\w+\W+\d+)|(\d+\w+\W+)|(\d+\W+\w+)|(\W+\w+\d+)|(\W+\d+\w+))[\w\d\W]*$"))
+            {
+                throw new Exception($"Пароль должен быть длиной от {_passwordMinLength} до {_passwordMaxLength}, состоять из цифр, букв и небуквенных символов");
             }
             if (model.Id.HasValue)
             {
