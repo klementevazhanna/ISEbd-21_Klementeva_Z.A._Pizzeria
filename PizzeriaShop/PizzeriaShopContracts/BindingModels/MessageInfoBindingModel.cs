@@ -23,5 +23,17 @@ namespace PizzeriaShopContracts.BindingModels
 
         [DataMember]
         public DateTime DateDelivery { get; set; }
+
+        [DataMember]
+        public int? ToSkip { get; set; }
+
+        [DataMember]
+        public int? ToTake { get; set; }
+
+        [DataMember]
+        public bool HasBeenRead { get; set; }
+
+        [DataMember]
+        public string Response { get; set; }
     }
 }

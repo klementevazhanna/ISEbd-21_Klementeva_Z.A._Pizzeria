@@ -25,5 +25,13 @@ namespace PizzeriaShopContracts.ViewModels
         [DataMember]
         [DisplayName("Текст")]
         public string Body { get; set; }
+
+        [DataMember]
+        [DisplayName("Прочитано")]
+        public string HasBeenRead { get; set; }
+
+        [DataMember]
+        [DisplayName("Ответ")]
+        public string Response { get; set; }
     }
 }

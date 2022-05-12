@@ -27,7 +27,7 @@ namespace PizzeriaShopBusinessLogic.BusinessLogics
             {
                 return _clientStorage.GetFullList();
             }
-            if (model.Id.HasValue)
+            if (model.Id.HasValue || !string.IsNullOrEmpty(model.Email))
             {
                 return new List<ClientViewModel> { _clientStorage.GetElement(model) };
             }
@@ -43,11 +43,11 @@ namespace PizzeriaShopBusinessLogic.BusinessLogics
             }
             if (!Regex.IsMatch(model.Email, @"^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.\s]\w+)*$"))
             {
-                throw new Exception("В качестве логина должна быть указана почта");
+                throw new Exception("В качестве логина должна быть указана почта!");
             }
             if (model.Password.Length > _passwordMaxLength || model.Password.Length < _passwordMinLength || !Regex.IsMatch(model.Password, @"^((\w+\d+\W+)|(\w+\W+\d+)|(\d+\w+\W+)|(\d+\W+\w+)|(\W+\w+\d+)|(\W+\d+\w+))[\w\d\W]*$"))
             {
-                throw new Exception($"Пароль должен быть длиной от {_passwordMinLength} до {_passwordMaxLength}, состоять из цифр, букв и небуквенных символов");
+                throw new Exception($"Пароль должен быть длиной от {_passwordMinLength} до {_passwordMaxLength}, состоять из цифр, букв и небуквенных символов!");
             }
             if (model.Id.HasValue)
             {

@@ -31,7 +31,19 @@ namespace PizzeriaShopBusinessLogic.BusinessLogics
         {
             var client = _clientStorage.GetElement(new ClientBindingModel { Email = model.FromMailAddress });
             model.ClientId = client?.Id;
-            _messageInfoStorage.Insert(model);
+
+            var element = _messageInfoStorage.GetElement(new MessageInfoBindingModel { MessageId = model.MessageId });
+            if (element != null)
+            {
+                _messageInfoStorage.Update(model);
+            }
+            else
+            {
+                model.HasBeenRead = false;
+                model.Response = "";
+
+                _messageInfoStorage.Insert(model);
+            }
         }
     }
 }

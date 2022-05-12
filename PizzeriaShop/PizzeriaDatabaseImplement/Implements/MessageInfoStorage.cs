@@ -1,4 +1,5 @@
-﻿using PizzeriaDatabaseImplement.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using PizzeriaDatabaseImplement.Models;
 using PizzeriaShopContracts.BindingModels;
 using PizzeriaShopContracts.StoragesContracts;
 using PizzeriaShopContracts.ViewModels;
@@ -14,15 +15,8 @@ namespace PizzeriaDatabaseImplement.Implements
         {
             using var context = new PizzeriaShopDatabase();
             return context.Messages
-            .Select(rec => new MessageInfoViewModel
-            {
-                MessageId = rec.MessageId,
-                SenderName = rec.SenderName,
-                DateDelivery = rec.DateDelivery,
-                Subject = rec.Subject,
-                Body = rec.Body
-            })
-            .ToList();
+                .Select(CreateModel)
+                .ToList();
         }
 
         public List<MessageInfoViewModel> GetFilteredList(MessageInfoBindingModel model)
@@ -32,38 +26,82 @@ namespace PizzeriaDatabaseImplement.Implements
                 return null;
             }
             using var context = new PizzeriaShopDatabase();
-            return context.Messages
-            .Where(rec => (model.ClientId.HasValue && rec.ClientId == model.ClientId) ||
-            (!model.ClientId.HasValue && rec.DateDelivery.Date == model.DateDelivery.Date))
-            .Select(rec => new MessageInfoViewModel
+            if (model.ToSkip.HasValue && model.ToTake.HasValue && !model.ClientId.HasValue)
             {
-                MessageId = rec.MessageId,
-                SenderName = rec.SenderName,
-                DateDelivery = rec.DateDelivery,
-                Subject = rec.Subject,
-                Body = rec.Body
-            })
-            .ToList();
+                return context.Messages
+                    .Skip((int)model.ToSkip)
+                    .Take((int)model.ToTake)
+                    .Select(CreateModel)
+                    .ToList();
+            }
+            return context.Messages
+                .Where(rec => (model.ClientId.HasValue && rec.ClientId == model.ClientId) ||
+                (!model.ClientId.HasValue && rec.DateDelivery.Date == model.DateDelivery.Date) ||
+                (model.MessageId != "" && rec.MessageId == model.MessageId))
+                .Skip(model.ToSkip ?? 0)
+                .Take(model.ToTake ?? context.Messages.Count())
+                .Select(CreateModel)
+                .ToList();
+        }
+
+        public MessageInfoViewModel GetElement(MessageInfoBindingModel model)
+        {
+            if (model == null)
+            {
+                return null;
+            }
+
+            using var context = new PizzeriaShopDatabase();
+            MessageInfo message = context.Messages
+                .Include(x => x.Client)
+                .FirstOrDefault(rec => rec.MessageId == model.MessageId);
+            return message != null ? CreateModel(message) : null;
         }
 
         public void Insert(MessageInfoBindingModel model)
         {
             using var context = new PizzeriaShopDatabase();
-            MessageInfo element = context.Messages.FirstOrDefault(rec => rec.MessageId == model.MessageId);
-            if (element != null)
+            context.Messages.Add(CreateModel(model, new MessageInfo()));
+            context.SaveChanges();
+        }
+
+        public void Update(MessageInfoBindingModel model)
+        {
+            using var context = new PizzeriaShopDatabase();
+            MessageInfo message = context.Messages.FirstOrDefault(rec => rec.MessageId == model.MessageId);
+            if (message == null)
             {
-                throw new Exception("Уже есть письмо с таким идентификатором");
+                throw new Exception("Письмо не найдено");
             }
-            context.Messages.Add(new MessageInfo
+            CreateModel(model, message);
+            context.SaveChanges();
+        }
+
+        private MessageInfoViewModel CreateModel(MessageInfo model)
+        {
+            return new MessageInfoViewModel
             {
                 MessageId = model.MessageId,
-                ClientId = model.ClientId,
-                SenderName = model.FromMailAddress,
+                SenderName = model.SenderName,
                 DateDelivery = model.DateDelivery,
                 Subject = model.Subject,
-                Body = model.Body
-            });
-            context.SaveChanges();
+                Body = model.Body,
+                HasBeenRead = model.HasBeenRead ? "Да" : "Нет",
+                Response = model.Response
+            };
+        }
+
+        private MessageInfo CreateModel(MessageInfoBindingModel model, MessageInfo message)
+        {
+            message.MessageId = model.MessageId;
+            message.ClientId = model.ClientId;
+            message.SenderName = model.FromMailAddress;
+            message.DateDelivery = model.DateDelivery;
+            message.Subject = model.Subject;
+            message.Body = model.Body;
+            message.HasBeenRead = model.HasBeenRead;
+            message.Response = model.Response;
+            return message;
         }
     }
 }

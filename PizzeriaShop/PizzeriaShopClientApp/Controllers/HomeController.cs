@@ -140,13 +140,15 @@ namespace PizzeriaShopClientApp.Controllers
             return count * _pizza.Price;
         }
 
-        public IActionResult Mail()
+        public IActionResult Mail(int page = 1)
         {
             if (Program.Client == null)
             {
                 return Redirect("~/Home/Enter");
             }
-            return View(APIClient.GetRequest<List<MessageInfoViewModel>>($"api/client/getmessages?clientId={Program.Client.Id}"));
+            var (list, hasNext) = APIClient.GetRequest<(List<MessageInfoViewModel> list, bool hasNext)>($"api/client/getmessages?clientId={Program.Client.Id}&page={page}");
+            (List<MessageInfoViewModel>, bool, int) model = (list, hasNext, page);
+            return View(model);
         }
     }
 }
