@@ -8,7 +8,7 @@ namespace PizzeriaShopRestApi.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    public class ClientController : ControllerBase
+    public class ClientController : Controller
     {
         private readonly IClientLogic _clientLogic;
 

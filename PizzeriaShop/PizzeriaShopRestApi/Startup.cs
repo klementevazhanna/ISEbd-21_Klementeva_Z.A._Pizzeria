@@ -30,13 +30,19 @@ namespace PizzeriaShopRestApi
             services.AddTransient<IClientStorage, ClientStorage>();
             services.AddTransient<IOrderStorage, OrderStorage>();
             services.AddTransient<IPizzaStorage, PizzasStorage>();
+            services.AddTransient<IIngredientStorage, IngredientStorage>();
+            services.AddTransient<IWareHouseStorage, WareHouseStorage>();
+
             services.AddTransient<IMessageInfoStorage, MessageInfoStorage>();
             services.AddTransient<IOrderLogic, OrderLogic>();
             services.AddTransient<IClientLogic, ClientLogic>();
             services.AddTransient<IPizzaLogic, PizzaLogic>();
+            services.AddTransient<IWareHouseLogic, WareHouseLogic>();
+            services.AddTransient<IIngredientLogic, IngredientLogic>();
+
+            services.AddControllers().AddNewtonsoftJson();
             services.AddTransient<IMessageInfoLogic, MessageInfoLogic>();
             services.AddSingleton<AbstractMailWorker, MailKitWorker>();
-            services.AddControllers();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "PizzeriaShopRestApi", Version = "v1" });
