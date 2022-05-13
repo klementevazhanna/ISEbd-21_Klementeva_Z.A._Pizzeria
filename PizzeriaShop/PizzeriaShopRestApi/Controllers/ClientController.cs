@@ -2,6 +2,8 @@
 using PizzeriaShopContracts.BindingModels;
 using PizzeriaShopContracts.BusinessLogicsContracts;
 using PizzeriaShopContracts.ViewModels;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace PizzeriaShopRestApi.Controllers
 {
@@ -9,24 +11,45 @@ namespace PizzeriaShopRestApi.Controllers
     [ApiController]
     public class ClientController : Controller
     {
-        private readonly IClientLogic _logic;
+        private readonly IClientLogic _clientLogic;
 
-        public ClientController(IClientLogic logic)
+        private readonly IMessageInfoLogic _messageLogic;
+
+        private readonly IMessageInfoLogic _mailLogic;
+
+        private readonly int _mailsOnPage = 3;
+
+        public ClientController(IClientLogic logic, IMessageInfoLogic messageLogic, IMessageInfoLogic mailLogic)
         {
-            _logic = logic;
+            _clientLogic = logic;
+            _messageLogic = messageLogic;
+            _mailLogic = mailLogic;
         }
 
         [HttpGet]
         public ClientViewModel Login(string login, string password)
         {
-            var list = _logic.Read(new ClientBindingModel { Email = login, Password = password });
+            var list = _clientLogic.Read(new ClientBindingModel { Email = login, Password = password });
             return (list != null && list.Count > 0) ? list[0] : null;
         }
 
-        [HttpPost]
-        public void Register(ClientBindingModel model) => _logic.CreateOrUpdate(model);
+        [HttpGet]
+        public (List<MessageInfoViewModel>, bool) GetMessages(int clientId, int page)
+        {
+            var list = _mailLogic.Read(new MessageInfoBindingModel
+            {
+                ClientId = clientId,
+                ToSkip = (page - 1) * _mailsOnPage,
+                ToTake = _mailsOnPage + 1
+            }).ToList();
+            var hasNext = !(list.Count <= _mailsOnPage);
+            return (list.Take(_mailsOnPage).ToList(), hasNext);
+        }
 
         [HttpPost]
-        public void UpdateData(ClientBindingModel model) => _logic.CreateOrUpdate(model);
+        public void Register(ClientBindingModel model) => _clientLogic.CreateOrUpdate(model);
+
+        [HttpPost]
+        public void UpdateData(ClientBindingModel model) => _clientLogic.CreateOrUpdate(model);
     }
 }

@@ -6,8 +6,12 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using PizzeriaDatabaseImplement.Implements;
 using PizzeriaShopBusinessLogic.BusinessLogics;
+using PizzeriaShopBusinessLogic.MailWorker;
+using PizzeriaShopBusinessLogic.MailWorker.Implements;
+using PizzeriaShopContracts.BindingModels;
 using PizzeriaShopContracts.BusinessLogicsContracts;
 using PizzeriaShopContracts.StoragesContracts;
+using System;
 
 namespace PizzeriaShopRestApi
 {
@@ -29,6 +33,7 @@ namespace PizzeriaShopRestApi
             services.AddTransient<IIngredientStorage, IngredientStorage>();
             services.AddTransient<IWareHouseStorage, WareHouseStorage>();
 
+            services.AddTransient<IMessageInfoStorage, MessageInfoStorage>();
             services.AddTransient<IOrderLogic, OrderLogic>();
             services.AddTransient<IClientLogic, ClientLogic>();
             services.AddTransient<IPizzaLogic, PizzaLogic>();
@@ -36,6 +41,8 @@ namespace PizzeriaShopRestApi
             services.AddTransient<IIngredientLogic, IngredientLogic>();
 
             services.AddControllers().AddNewtonsoftJson();
+            services.AddTransient<IMessageInfoLogic, MessageInfoLogic>();
+            services.AddSingleton<AbstractMailWorker, MailKitWorker>();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "PizzeriaShopRestApi", Version = "v1" });
@@ -61,6 +68,17 @@ namespace PizzeriaShopRestApi
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+            });
+
+            var mailSender = app.ApplicationServices.GetService<AbstractMailWorker>();
+            mailSender.MailConfig(new MailConfigBindingModel
+            {
+                MailLogin = Configuration?["MailLogin"]?.ToString(),
+                MailPassword = Configuration?["MailPassword"]?.ToString(),
+                SmtpClientHost = Configuration?["SmtpClientHost"]?.ToString(),
+                SmtpClientPort = Convert.ToInt32(Configuration?["SmtpClientPort"]?.ToString()),
+                PopHost = Configuration?["PopHost"]?.ToString(),
+                PopPort = Convert.ToInt32(Configuration?["PopPort"]?.ToString())
             });
         }
     }

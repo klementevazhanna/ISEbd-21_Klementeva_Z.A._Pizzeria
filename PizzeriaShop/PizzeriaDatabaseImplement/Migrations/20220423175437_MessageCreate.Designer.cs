@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PizzeriaDatabaseImplement;
 
 namespace PizzeriaDatabaseImplement.Migrations
 {
     [DbContext(typeof(PizzeriaShopDatabase))]
-    partial class PizzeriaShopDatabaseModelSnapshot : ModelSnapshot
+    [Migration("20220423175437_MessageCreate")]
+    partial class MessageCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -94,12 +96,6 @@ namespace PizzeriaDatabaseImplement.Migrations
 
                     b.Property<DateTime>("DateDelivery")
                         .HasColumnType("datetime2");
-
-                    b.Property<bool>("HasBeenRead")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Response")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SenderName")
                         .HasColumnType("nvarchar(max)");
@@ -200,54 +196,6 @@ namespace PizzeriaDatabaseImplement.Migrations
                     b.ToTable("PizzaIngredients");
                 });
 
-            modelBuilder.Entity("PizzeriaDatabaseImplement.Models.WareHouse", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("DateCreate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("ResponsiblePersonFIO")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("WareHouseName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("WareHouses");
-                });
-
-            modelBuilder.Entity("PizzeriaDatabaseImplement.Models.WareHouseIngredient", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("Count")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IngredientId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("WareHouseId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("IngredientId");
-
-                    b.HasIndex("WareHouseId");
-
-                    b.ToTable("WareHouseIngredients");
-                });
-
             modelBuilder.Entity("PizzeriaDatabaseImplement.Models.MessageInfo", b =>
                 {
                     b.HasOne("PizzeriaDatabaseImplement.Models.Client", "Client")
@@ -285,21 +233,6 @@ namespace PizzeriaDatabaseImplement.Migrations
                     b.HasOne("PizzeriaDatabaseImplement.Models.Pizza", "Pizza")
                         .WithMany("PizzaIngredients")
                         .HasForeignKey("PizzaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("PizzeriaDatabaseImplement.Models.WareHouseIngredient", b =>
-                {
-                    b.HasOne("PizzeriaDatabaseImplement.Models.Ingredient", "Ingredient")
-                        .WithMany()
-                        .HasForeignKey("IngredientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("PizzeriaDatabaseImplement.Models.WareHouse", "WareHouse")
-                        .WithMany("WareHouseIngredients")
-                        .HasForeignKey("WareHouseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

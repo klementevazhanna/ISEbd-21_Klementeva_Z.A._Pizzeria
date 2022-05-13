@@ -1,4 +1,5 @@
-﻿using PizzeriaShopContracts.BindingModels;
+﻿using PizzeriaShopBusinessLogic.MailWorker;
+using PizzeriaShopContracts.BindingModels;
 using PizzeriaShopContracts.BusinessLogicsContracts;
 using PizzeriaShopContracts.Enums;
 using PizzeriaShopContracts.StoragesContracts;
@@ -18,9 +19,15 @@ namespace PizzeriaShopBusinessLogic.BusinessLogics
 
         private readonly object locker = new();
 
-        public OrderLogic(IOrderStorage orderStorage, IWareHouseStorage wareHouseStorage, IPizzaStorage pizzaStorage)
+        private readonly IClientStorage _clientStorage;
+
+        private readonly AbstractMailWorker _mailWorker;
+
+        public OrderLogic(IOrderStorage orderStorage, IClientStorage clientStorage, IWareHouseStorage wareHouseStorage, IPizzaStorage pizzaStorage, AbstractMailWorker mailWorker)
         {
             _orderStorage = orderStorage;
+            _clientStorage = clientStorage;
+            _mailWorker = mailWorker;
             _wareHouseStorage = wareHouseStorage;
             _pizzaStorage = pizzaStorage;
         }
@@ -49,33 +56,38 @@ namespace PizzeriaShopBusinessLogic.BusinessLogics
                 DateCreate = DateTime.Now,
                 Status = OrderStatus.Принят
             });
+            _mailWorker.MailSendAsync(new MailSendInfoBindingModel
+            {
+                MailAddress = _clientStorage.GetElement(new ClientBindingModel { Id = model.ClientId })?.Email,
+                Subject = "Новый заказ",
+                Text = $"Заказ от {DateTime.Now} на сумму {model.Sum:N2} взят в работу."
+            });
         }
 
         public void TakeOrderInWork(ChangeStatusBindingModel model)
         {
+            var order = _orderStorage.GetElement(new OrderBindingModel { Id = model.OrderId });
+            if (order == null)
+            {
+                throw new Exception("Не найден заказ");
+            }
+            if (order.Status != OrderStatus.Принят && order.Status != OrderStatus.Требуются_материалы)
+            {
+                throw new Exception("Заказ не взят к выполнению");
+            }
+            var updatingOrder = new OrderBindingModel
+            {
+                Id = order.Id,
+                ClientId = order.ClientId,
+                ImplementerId = model.ImplementerId,
+                PizzaId = order.PizzaId,
+                Count = order.Count,
+                Sum = order.Sum,
+                DateCreate = order.DateCreate,
+                Status = OrderStatus.Выполняется
+            };
             lock (locker)
             {
-                var order = _orderStorage.GetElement(new OrderBindingModel { Id = model.OrderId });
-                if (order == null)
-                {
-                    throw new Exception("Не найден заказ");
-                }
-                if (order.Status != OrderStatus.Принят && order.Status != OrderStatus.Требуются_материалы)
-                {
-                    throw new Exception("Заказ не взят к выполнению");
-                }
-
-                var updatingOrder = new OrderBindingModel
-                {
-                    Id = order.Id,
-                    ClientId = order.ClientId,
-                    ImplementerId = model.ImplementerId,
-                    PizzaId = order.PizzaId,
-                    Count = order.Count,
-                    Sum = order.Sum,
-                    DateCreate = order.DateCreate
-                };
-
                 if (!_wareHouseStorage.WriteOffIngredients(
                     _pizzaStorage.GetElement(
                         new PizzaBindingModel { Id = order.PizzaId }
@@ -85,13 +97,14 @@ namespace PizzeriaShopBusinessLogic.BusinessLogics
                 {
                     updatingOrder.Status = OrderStatus.Требуются_материалы;
                 }
-                else
-                {
-                    updatingOrder.Status = OrderStatus.Выполняется;
-                }
-
-                _orderStorage.Update(updatingOrder);
             }
+            _orderStorage.Update(updatingOrder);
+            _mailWorker.MailSendAsync(new MailSendInfoBindingModel
+            {
+                MailAddress = _clientStorage.GetElement(new ClientBindingModel { Id = order.ClientId })?.Email,
+                Subject = $"Заказ №{order.Id}",
+                Text = $"Заказ №{order.Id} выполняется."
+            });
         }
 
         public void FinishOrder(ChangeStatusBindingModel model)
@@ -114,6 +127,12 @@ namespace PizzeriaShopBusinessLogic.BusinessLogics
                     DateCreate = order.DateCreate,
                     DateImplement = DateTime.Now,
                     Status = OrderStatus.Готов
+                });
+                _mailWorker.MailSendAsync(new MailSendInfoBindingModel
+                {
+                    MailAddress = _clientStorage.GetElement(new ClientBindingModel { Id = order.ClientId })?.Email,
+                    Subject = $"Заказ №{order.Id}",
+                    Text = $"Заказ №{order.Id} готов!"
                 });
             }
         }
@@ -143,6 +162,12 @@ namespace PizzeriaShopBusinessLogic.BusinessLogics
                 DateCreate = order.DateCreate,
                 DateImplement = order.DateImplement,
                 Status = OrderStatus.Выдан
+            });
+            _mailWorker.MailSendAsync(new MailSendInfoBindingModel
+            {
+                MailAddress = _clientStorage.GetElement(new ClientBindingModel { Id = order.ClientId })?.Email,
+                Subject = $"Заказ №{order.Id}",
+                Text = $"Заказ №{order.Id} выдан."
             });
         }
     }
