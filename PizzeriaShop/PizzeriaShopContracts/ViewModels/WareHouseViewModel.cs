@@ -1,6 +1,6 @@
-﻿using System;
+﻿using PizzeriaShopContracts.Attributes;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Runtime.Serialization;
 
 namespace PizzeriaShopContracts.ViewModels
@@ -12,15 +12,15 @@ namespace PizzeriaShopContracts.ViewModels
         public int? Id { get; set; }
 
         [DataMember]
-        [DisplayName("Название склада")]
+        [Column(title: "Название склада", width: 100)]
         public string WareHouseName { get; set; }
 
         [DataMember]
-        [DisplayName("ФИО ответственного")]
+        [Column(title: "ФИО ответственного", width: 50)]
         public string ResponsiblePersonFIO { get; set; }
 
         [DataMember]
-        [DisplayName("Дата создания склада")]
+        [Column(title: "Дата создания", width: 100, dateType: "d M y")]
         public DateTime DateCreate { get; set; }
 
         [DataMember]

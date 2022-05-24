@@ -3,6 +3,7 @@ using PizzeriaShopContracts.Enums;
 using System;
 using System.ComponentModel;
 using System.Runtime.Serialization;
+using System.Windows.Forms;
 
 namespace PizzeriaShopContracts.ViewModels
 {
@@ -32,17 +33,17 @@ namespace PizzeriaShopContracts.ViewModels
         [DisplayName("Исполнитель")]
         public string ImplementerFIO { get; set; }
 
-        [Column(title: "Пицца", gridViewAutoSize: GridViewAutoSize.Fill)]
+        [Column(title: "Пицца", width: 150)]
         [DataMember]
         [DisplayName("Пицца")]
         public string PizzaName { get; set; }
 
-        [Column(title: "Количество", width: 100)]
+        [Column(title: "Количество", width: 100, alignment: DataGridViewContentAlignment.BottomRight)]
         [DataMember]
         [DisplayName("Количество")]
         public int Count { get; set; }
 
-        [Column(title: "Сумма", width: 50)]
+        [Column(title: "Сумма", width: 50, alignment: DataGridViewContentAlignment.BottomRight)]
         [DataMember]
         [DisplayName("Сумма")]
         public decimal Sum { get; set; }
@@ -52,12 +53,12 @@ namespace PizzeriaShopContracts.ViewModels
         [DisplayName("Статус")]
         public OrderStatus Status { get; set; }
 
-        [Column(title: "Дата создания", width: 100)]
+        [Column(title: "Дата создания", width: 100, dateType: "d M y")]
         [DataMember]
         [DisplayName("Дата создания")]
         public DateTime DateCreate { get; set; }
 
-        [Column(title: "Дата выполнения", width: 100)]
+        [Column(title: "Дата выполнения", width: 100, dateType: "d M y")]
         [DataMember]
         [DisplayName("Дата выполнения")]
         public DateTime? DateImplement { get; set; }

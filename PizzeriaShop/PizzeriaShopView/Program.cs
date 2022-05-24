@@ -131,11 +131,16 @@ namespace PizzeriaShopView
                                 Visible = columnAttr.Visible,
                                 Width = columnAttr.Width
                             };
+                            if (columnAttr.Alignment != DataGridViewContentAlignment.NotSet)
+                            {
+                                column.DefaultCellStyle.Alignment = columnAttr.Alignment;
+                            }
                             if (columnAttr.GridViewAutoSize !=
                             GridViewAutoSize.None)
                             {
                                 column.AutoSizeMode = (DataGridViewAutoSizeColumnMode)Enum.Parse(typeof(DataGridViewAutoSizeColumnMode), columnAttr.GridViewAutoSize.ToString());
                             }
+                            column.DefaultCellStyle.Format = columnAttr.DateType;
                             grid.Columns.Add(column);
                         }
                     }

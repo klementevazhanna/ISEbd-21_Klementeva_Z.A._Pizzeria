@@ -1,6 +1,9 @@
 ﻿using PizzeriaShopContracts.BindingModels;
 using PizzeriaShopContracts.BusinessLogicsContracts;
+using PizzeriaShopContracts.ViewModels;
 using System;
+using System.Collections.Generic;
+using System.Reflection;
 using System.Windows.Forms;
 
 namespace PizzeriaShopView
@@ -19,7 +22,8 @@ namespace PizzeriaShopView
         {
             try
             {
-                var dict = _logic.GetPizzaIngredient();
+                MethodInfo method = _logic.GetType().GetMethod("GetPizzaIngredient");
+                var dict = (List<ReportPizzaIngredientViewModel>)method.Invoke(_logic, new object[] { });
                 if (dict != null)
                 {
                     dataGridView.Rows.Clear();
@@ -48,10 +52,11 @@ namespace PizzeriaShopView
             {
                 try
                 {
-                    _logic.SavePizzaIngredientToExcelFile(new ReportBindingModel
+                    MethodInfo method = _logic.GetType().GetMethod("SavePizzaIngredientToExcelFile");
+                    var dataSource = method.Invoke(_logic, new object[] { new ReportBindingModel
                     {
                         FileName = dialog.FileName
-                    });
+                    } });
                     MessageBox.Show("Выполнено", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 catch (Exception ex)

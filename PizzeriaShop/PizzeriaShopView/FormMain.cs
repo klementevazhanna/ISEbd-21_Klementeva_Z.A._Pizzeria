@@ -1,6 +1,7 @@
 ﻿using PizzeriaShopContracts.BindingModels;
 using PizzeriaShopContracts.BusinessLogicsContracts;
 using System;
+using System.Reflection;
 using System.Windows.Forms;
 using Unity;
 
@@ -93,7 +94,8 @@ namespace PizzeriaShopView
             using var dialog = new SaveFileDialog { Filter = "docx|*.docx" };
             if (dialog.ShowDialog() == DialogResult.OK)
             {
-                _reportLogic.SavePizzasToWordFile(new ReportBindingModel { FileName = dialog.FileName });
+                MethodInfo method = _reportLogic.GetType().GetMethod("SavePizzasToWordFile");
+                method.Invoke(_reportLogic, new object[] { new ReportBindingModel { FileName = dialog.FileName } });
                 MessageBox.Show("Выполнено", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
@@ -127,7 +129,8 @@ namespace PizzeriaShopView
             using var dialog = new SaveFileDialog { Filter = "docx|*.docx" };
             if (dialog.ShowDialog() == DialogResult.OK)
             {
-                _reportLogic.SaveWareHousesToWordFile(new ReportBindingModel { FileName = dialog.FileName });
+                MethodInfo method = _reportLogic.GetType().GetMethod("SaveWareHousesToWordFile");
+                method.Invoke(_reportLogic, new object[] { new ReportBindingModel { FileName = dialog.FileName } });
                 MessageBox.Show("Выполнено", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }

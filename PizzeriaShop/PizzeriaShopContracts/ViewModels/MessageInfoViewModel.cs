@@ -16,7 +16,7 @@ namespace PizzeriaShopContracts.ViewModels
         [DisplayName("Отправитель")]
         public string SenderName { get; set; }
 
-        [Column(title: "Дата", width: 50)]
+        [Column(title: "Дата", width: 50, dateType: "d M y")]
         [DataMember]
         [DisplayName("Дата письма")]
         public DateTime DateDelivery { get; set; }
