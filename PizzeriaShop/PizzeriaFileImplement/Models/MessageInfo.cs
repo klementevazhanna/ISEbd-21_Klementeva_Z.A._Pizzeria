@@ -15,5 +15,9 @@ namespace PizzeriaFileImplement.Models
         public string Subject { get; set; }
 
         public string Body { get; set; }
+
+        public bool HasBeenRead { get; set; }
+
+        public string Response { get; set; }
     }
 }

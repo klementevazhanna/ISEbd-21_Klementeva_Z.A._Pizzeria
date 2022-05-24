@@ -60,12 +60,12 @@ namespace PizzeriaShopView
                 try
                 {
                     int id = Convert.ToInt32(comboBoxPizza.SelectedValue);
-                    PizzaViewModel product = _logicP.Read(new PizzaBindingModel
+                    PizzaViewModel pizza = _logicP.Read(new PizzaBindingModel
                     {
                         Id = id
                     })?[0];
                     int count = Convert.ToInt32(textBoxCount.Text);
-                    textBoxSum.Text = (count * product?.Price ?? 0).ToString();
+                    textBoxSum.Text = (count * pizza?.Price ?? 0).ToString();
                 }
                 catch (Exception ex)
                 {

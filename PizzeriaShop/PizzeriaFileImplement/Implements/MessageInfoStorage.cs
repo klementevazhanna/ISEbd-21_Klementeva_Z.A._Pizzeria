@@ -2,6 +2,7 @@
 using PizzeriaShopContracts.BindingModels;
 using PizzeriaShopContracts.StoragesContracts;
 using PizzeriaShopContracts.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -29,11 +30,32 @@ namespace PizzeriaFileImplement.Implements
             {
                 return null;
             }
+            if (model.ToSkip.HasValue && model.ToTake.HasValue && !model.ClientId.HasValue)
+            {
+                return _source.Messages
+                    .Skip((int)model.ToSkip)
+                    .Take((int)model.ToTake)
+                    .Select(CreateModel)
+                    .ToList();
+            }
             return _source.Messages
                 .Where(rec => (model.ClientId.HasValue && rec.ClientId == model.ClientId) ||
                 (!model.ClientId.HasValue && rec.DateDelivery.Date == model.DateDelivery.Date))
+                .Skip(model.ToSkip ?? 0)
+                .Take(model.ToTake ?? _source.Messages.Count())
                 .Select(CreateModel)
                 .ToList();
+        }
+
+        public MessageInfoViewModel GetElement(MessageInfoBindingModel model)
+        {
+            if (model == null)
+            {
+                return null;
+            }
+
+            MessageInfo message = _source.Messages.FirstOrDefault(rec => rec.MessageId == model.MessageId);
+            return message != null ? CreateModel(message) : null;
         }
 
         public void Insert(MessageInfoBindingModel model)
@@ -45,6 +67,16 @@ namespace PizzeriaFileImplement.Implements
             _source.Messages.Add(CreateModel(model, new MessageInfo()));
         }
 
+        public void Update(MessageInfoBindingModel model)
+        {
+            MessageInfo message = _source.Messages.FirstOrDefault(rec => rec.MessageId == model.MessageId);
+            if (message == null)
+            {
+                throw new Exception("Письмо не найдено");
+            }
+            CreateModel(model, message);
+        }
+
         private MessageInfo CreateModel(MessageInfoBindingModel model, MessageInfo message)
         {
             message.MessageId = model.MessageId;
@@ -52,6 +84,8 @@ namespace PizzeriaFileImplement.Implements
             message.DateDelivery = model.DateDelivery;
             message.Subject = model.Subject;
             message.Body = model.Body;
+            message.HasBeenRead = model.HasBeenRead;
+            message.Response = model.Response;
             return message;
         }
 
@@ -64,6 +98,8 @@ namespace PizzeriaFileImplement.Implements
                 DateDelivery = message.DateDelivery,
                 Subject = message.Subject,
                 Body = message.Body,
+                HasBeenRead = message.HasBeenRead ? "Да" : "Нет",
+                Response = message.Response
             };
         }
     }

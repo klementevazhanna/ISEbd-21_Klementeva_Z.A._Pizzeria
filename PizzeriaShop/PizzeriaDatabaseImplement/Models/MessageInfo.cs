@@ -18,6 +18,10 @@ namespace PizzeriaDatabaseImplement.Models
 
         public string Body { get; set; }
 
+        public bool HasBeenRead { get; set; }
+
+        public string Response { get; set; }
+
         public virtual Client Client { get; set; }
     }
 }

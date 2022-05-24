@@ -22,7 +22,7 @@ namespace PizzeriaShopView
             {
                 Dock = DockStyle.Fill
             };
-            reportViewer.LocalReport.LoadReportDefinition(new FileStream("C:\\Users\\f0rge\\VSProjects\\TechProgr\\FourthSemestrLabWorks\\PizzeriaShop_4base\\PizzeriaShop\\PizzeriaShopView\\ReportOrders.rdlc", FileMode.Open));
+            reportViewer.LocalReport.LoadReportDefinition(new FileStream("C:\\Users\\f0rge\\VSProjects\\TechProgr\\FourthSemestrLabWorks\\ISEbd-21_Klementeva_Z.A._Pizzeria\\PizzeriaShop\\PizzeriaShopView\\ReportOrders.rdlc", FileMode.Open));
             Controls.Clear();
             Controls.Add(reportViewer);
             Controls.Add(panel);

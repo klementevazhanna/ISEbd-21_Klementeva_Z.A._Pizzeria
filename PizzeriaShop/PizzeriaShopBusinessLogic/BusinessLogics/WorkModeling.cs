@@ -53,6 +53,30 @@ namespace PizzeriaShopBusinessLogic.BusinessLogics
                 Thread.Sleep(implementer.PauseTime);
             }
 
+            // ищем заказы, которым нужны ингредиенты (может быть они появились)
+            var neededIngredientsOrders = await Task.Run(() => _orderLogic.Read(new OrderBindingModel
+            {
+                ImplementerId = implementer.Id,
+                Status = OrderStatus.Требуются_материалы
+            }));
+
+            foreach (var order in neededIngredientsOrders)
+            {
+                _orderLogic.TakeOrderInWork(new ChangeStatusBindingModel { OrderId = order.Id, ImplementerId = implementer.Id });
+
+                var currentOrder = _orderLogic.Read(new OrderBindingModel { Id = order.Id })[0];
+                if (currentOrder.Status == OrderStatus.Требуются_материалы)
+                {
+                    continue;
+                }
+
+                // делаем работу
+                Thread.Sleep(implementer.WorkingTime * _rnd.Next(1, 5) * order.Count);
+                _orderLogic.FinishOrder(new ChangeStatusBindingModel { OrderId = order.Id });
+                // отдыхаем
+                Thread.Sleep(implementer.PauseTime);
+            }
+
             await Task.Run(() =>
             {
                 while (!orders.IsEmpty)
@@ -61,6 +85,13 @@ namespace PizzeriaShopBusinessLogic.BusinessLogics
                     {
                         // пытаемся назначить заказ на исполнителя
                         _orderLogic.TakeOrderInWork(new ChangeStatusBindingModel { OrderId = order.Id, ImplementerId = implementer.Id });
+
+                        var currentOrder = _orderLogic.Read(new OrderBindingModel{ Id = order.Id })[0];
+                        if (currentOrder.Status == OrderStatus.Требуются_материалы)
+                        {
+                            continue;
+                        }
+
                         // делаем работу
                         Thread.Sleep(implementer.WorkingTime * _rnd.Next(1, 5) * order.Count);
                         _orderLogic.FinishOrder(new ChangeStatusBindingModel { OrderId = order.Id });

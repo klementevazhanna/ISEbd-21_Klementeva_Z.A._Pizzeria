@@ -12,6 +12,8 @@ namespace PizzeriaShopBusinessLogic.OfficePackage.Implements
 
         private Body _docBody;
 
+        private Table _table;
+
         private static JustificationValues GetJustificationValues(WordJustificationType type)
         {
             return type switch
@@ -104,6 +106,53 @@ namespace PizzeriaShopBusinessLogic.OfficePackage.Implements
             _docBody.AppendChild(CreateSectionProperties());
             _wordDocument.MainDocumentPart.Document.Save();
             _wordDocument.Close();
+        }
+
+        protected override void CreateTable()
+        {
+            _table = new Table();
+            _docBody.AppendChild(_table);
+        }
+
+        protected override void CreateTableRow(WordTableRow row)
+        {
+            var table = _docBody.GetFirstChild<Table>();
+            if (row != null && table != null)
+            {
+                var docTableRow = new TableRow();
+
+                foreach (var cell in row.Cells)
+                {
+                    var docParagraph = new Paragraph();
+                    var docRun = new Run();
+                    if (row.Bolded)
+                    {
+                        var properties = new RunProperties();
+                        properties.AppendChild(new Bold());
+                        docRun.AppendChild(properties);
+                    }
+                    docRun.AppendChild(new Text
+                    {
+                        Text = cell.Text
+                    });
+                    docParagraph.AppendChild(docRun);
+
+                    var docTableCell = new TableCell();
+                    docTableCell.AppendChild(docParagraph);
+                    docTableCell.AppendChild(
+                        new TableCellProperties(
+                            new TableCellWidth
+                            {
+                                Type = TableWidthUnitValues.Dxa,
+                                Width = cell.Width
+                            }
+                    ));
+
+                    docTableRow.Append(docTableCell);
+                }
+
+                table.Append(docTableRow);
+            }
         }
     }
 }

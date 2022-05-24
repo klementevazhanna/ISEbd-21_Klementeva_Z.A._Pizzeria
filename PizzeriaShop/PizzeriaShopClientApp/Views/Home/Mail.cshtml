@@ -1,5 +1,5 @@
 ﻿@using PizzeriaShopContracts.ViewModels
-@model List<MessageInfoViewModel>
+@model (List<MessageInfoViewModel> list, bool hasNext, int page)
 @{
     ViewData["Title"] = "Mail"; }
 <div class="text-center">
@@ -7,7 +7,7 @@
 </div>
 <div class="text-center">
     @{
-        if (Model == null)
+        if (Model.list == null)
         {
             <h3 class="display-4">Авторизируйтесь</h3>
             return;
@@ -30,7 +30,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var item in Model)
+                @foreach (var item in Model.list)
                 {
                     <tr>
                         <td>
@@ -49,4 +49,17 @@
                 }
             </tbody>
         </table> }
+</div>
+<div style="display: flex; justify-content: space-around;">
+    @{
+        if ((Model.page - 1) >= 1)
+        {
+            <a asp-action="Mail" asp-route-page="@(Model.page-1)">Назад (@(Model.page-1))</a>
+        }
+        <span style="font-weight: bold;">Текущая страница: @(Model.page)</span>
+        if (Model.hasNext)
+        {
+            <a asp-action="Mail" asp-route-page="@(Model.page+1)">Далее (@(Model.page+1))</a>
+        }
+    }
 </div>
