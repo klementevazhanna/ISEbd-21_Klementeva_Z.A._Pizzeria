@@ -3,6 +3,7 @@ using PizzeriaShopContracts.BindingModels;
 using PizzeriaShopContracts.BusinessLogicsContracts;
 using System;
 using System.IO;
+using System.Reflection;
 using System.Windows.Forms;
 
 namespace PizzeriaShopView
@@ -38,11 +39,12 @@ namespace PizzeriaShopView
 
             try
             {
-                var dataSource = _logic.GetOrders(new ReportBindingModel
+                MethodInfo method = _logic.GetType().GetMethod("GetOrders");
+                var dataSource = method.Invoke(_logic, new object[] { new ReportBindingModel
                 {
                     DateFrom = dateTimePickerFrom.Value,
                     DateTo = dateTimePickerTo.Value
-                });
+                } });
 
                 var source = new ReportDataSource("DataSetOrders", dataSource);
                 reportViewer.LocalReport.DataSources.Clear();
@@ -76,12 +78,13 @@ namespace PizzeriaShopView
             {
                 try
                 {
-                    _logic.SaveOrdersToPdfFile(new ReportBindingModel
+                    MethodInfo method = _logic.GetType().GetMethod("SaveOrdersToPdfFile");
+                    var dataSource = method.Invoke(_logic, new object[] { new ReportBindingModel
                     {
                         FileName = dialog.FileName,
                         DateFrom = dateTimePickerFrom.Value,
                         DateTo = dateTimePickerTo.Value
-                    });
+                    } });
                     MessageBox.Show("Выполнено", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 catch (Exception ex)

@@ -57,12 +57,7 @@ namespace PizzeriaShopView
                     buttonPrev.Enabled = false;
                 }
                 labelPageNum.Text = $"Текущая страница: {(_currentPage + 1)}";
-                if (list != null)
-                {
-                    dataGridView.DataSource = list.Take(_mailsOnPage).ToList();
-                    dataGridView.Columns[0].Visible = false;
-                    dataGridView.Columns[6].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-                }
+                Program.ConfigGrid(list.Take(_mailsOnPage).ToList(), dataGridView);
             }
             catch (Exception ex)
             {
